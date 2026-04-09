@@ -1,0 +1,22 @@
+{
+  "name": "재가복지 평가 대비 퀴즈",
+  "short_name": "재가복지 퀴즈",
+  "description": "재가복지 평가 대비 퀴즈 앱",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F5F7FF",
+  "theme_color": "#4338CA",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

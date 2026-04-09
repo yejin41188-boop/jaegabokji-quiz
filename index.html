@@ -1416,9 +1416,19 @@ function render(){
 
 // ── 액션 ─────────────────────────────────────
 function startDay(d){
-  curDay=d;curQ=0;sessAns=[];wrongQs=[];
+  curDay=d;
   reviewMode=false;reviewIdx=0;
   qStates=[];rqStates=[];
+  // 중간 저장된 진도 복원
+  var saved=progData[d];
+  var day=DAYS.find(function(x){return x.d===d;});
+  if(saved&&saved.partial&&saved.done>0&&saved.done<day.n){
+    curQ=saved.done;
+    sessAns=saved.ans||[];
+    wrongQs=saved.wrongs||[];
+  }else{
+    curQ=0;sessAns=[];wrongQs=[];
+  }
   screen='question';render();
 }
 
@@ -1478,7 +1488,13 @@ function nextQ(){
     if(curQ>=day.n){
       progData[curDay]={done:day.n,correct:sessAns.filter(function(a){return a;}).length};
       saveP();screen='done';render();
-    }else{render();}
+    }else{
+      // 중간 진도 저장
+      progData[curDay]={done:curQ,correct:sessAns.filter(function(a){return a;}).length,
+        partial:true,ans:sessAns.slice(),wrongs:wrongQs.slice()};
+      saveP();
+      render();
+    }
   }
 }
 
