@@ -4,90 +4,311 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>재가복지 평가 대비 퀴즈</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4338CA">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="재가복지 퀴즈">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --primary:#3730A3;
+  --primary-light:#6366F1;
+  --primary-bg:#EEF2FF;
+  --accent:#7C3AED;
+  --success:#059669;
+  --success-bg:#ECFDF5;
+  --danger:#DC2626;
+  --danger-bg:#FEF2F2;
+  --warn:#D97706;
+  --warn-bg:#FFFBEB;
+  --text:#111827;
+  --text-2:#4B5563;
+  --text-3:#9CA3AF;
+  --border:#E5E7EB;
+  --card:#FFFFFF;
+  --bg:#F1F4FF;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(55,48,163,.1),0 2px 6px rgba(0,0,0,.04);
+  --shadow-lg:0 10px 30px rgba(55,48,163,.15),0 4px 10px rgba(0,0,0,.06);
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:20px;
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#F5F7FF;min-height:100vh}
+body{
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  background:var(--bg);
+  min-height:100vh;
+  background-image:radial-gradient(ellipse at 20% 0%,rgba(99,102,241,.08) 0%,transparent 60%),
+                   radial-gradient(ellipse at 80% 100%,rgba(124,58,237,.06) 0%,transparent 60%);
+}
 #app{max-width:480px;margin:0 auto;padding:0 4px}
-.home{padding:1rem .8rem 3rem}
-.hdr{text-align:center;padding:.8rem 0 1.2rem}
-.hdr h1{font-size:20px;font-weight:700;color:#1a1a2e}
-.hdr p{font-size:13px;color:#888;margin-top:4px}
-.tot{display:flex;align-items:center;gap:13px;background:white;border-radius:16px;padding:14px 16px;margin-bottom:1.2rem;box-shadow:0 2px 12px rgba(67,56,202,.1)}
-.tot-ico{font-size:26px}.tot-info{flex:1}
-.tot-lbl{font-size:13px;color:#666}
-.tot-val{font-size:19px;font-weight:700;color:#4338CA}
-.pbar{height:8px;background:#E0E7FF;border-radius:4px;overflow:hidden;margin-top:5px}
-.pfill{height:100%;background:linear-gradient(90deg,#4338CA,#7C3AED);border-radius:4px;transition:width .5s}
-.dc{background:white;border:1.5px solid #E8E8F0;border-radius:16px;padding:14px 15px;margin-bottom:10px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:all .15s;box-shadow:0 1px 6px rgba(0,0,0,.05)}
-.dc:not(.soon):active{transform:scale(.98)}
-.dc.done{border-color:#38A169;background:#F0FFF4}
-.dc.soon{opacity:.35;cursor:default}
-.dc:not(.soon):not(.done):hover{border-color:#7C3AED;background:#FAF5FF}
-.dico{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+
+/* ── 홈 ── */
+.home{padding:.8rem .8rem 3rem}
+.hdr{
+  text-align:center;
+  padding:1.4rem .5rem 1.6rem;
+  position:relative;
+}
+.hdr::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,var(--primary) 0%,var(--accent) 100%);
+  border-radius:0 0 var(--radius-lg) var(--radius-lg);
+  margin:0 -4px;
+  opacity:.07;
+}
+.hdr h1{
+  font-size:22px;
+  font-weight:800;
+  color:var(--primary);
+  letter-spacing:-.03em;
+  margin-bottom:4px;
+}
+.hdr p{font-size:13px;color:var(--text-3);font-weight:500}
+
+.tot{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card);
+  border-radius:var(--radius-md);
+  padding:16px 18px;
+  margin-bottom:1.2rem;
+  box-shadow:var(--shadow-md);
+  border:1px solid rgba(99,102,241,.08);
+}
+.tot-ico{font-size:28px}
+.tot-info{flex:1}
+.tot-lbl{font-size:12px;color:var(--text-3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.tot-val{font-size:20px;font-weight:800;color:var(--primary);letter-spacing:-.02em;margin-top:1px}
+.pbar{height:6px;background:var(--primary-bg);border-radius:3px;overflow:hidden;margin-top:7px}
+.pfill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+.dc{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:14px 15px;
+  margin-bottom:9px;
+  display:flex;align-items:center;gap:13px;
+  cursor:pointer;
+  transition:all .2s cubic-bezier(.4,0,.2,1);
+  box-shadow:var(--shadow-sm);
+}
+.dc:not(.soon):active{transform:scale(.97);box-shadow:none}
+.dc.done{border-color:#A7F3D0;background:linear-gradient(135deg,#F0FDF4,#ECFDF5)}
+.dc.soon{opacity:.3;cursor:default}
+.dc:not(.soon):not(.done):hover{
+  border-color:var(--primary-light);
+  box-shadow:var(--shadow-md);
+  transform:translateY(-1px);
+}
+.dico{
+  width:50px;height:50px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
 .di{flex:1;min-width:0}
-.dn{font-size:11px;font-weight:600;color:#999;margin-bottom:2px}
-.dt{font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ds{font-size:12px;color:#888}
+.dn{font-size:11px;font-weight:700;color:var(--text-3);margin-bottom:2px;letter-spacing:.04em}
+.dt{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds{font-size:12px;color:var(--text-3);font-weight:500}
 .dr{text-align:right;flex-shrink:0}
-.dpg{font-size:14px;font-weight:700;color:#333;margin-bottom:4px}
-.dg{font-size:11px;padding:3px 9px;border-radius:9px;white-space:nowrap;display:inline-block;font-weight:600}
-.gd{background:#C6F6D5;color:#276749}.gp{background:#BEE3F8;color:#2C5282}.gn{background:#E0E7FF;color:#4338CA}.gs{background:#F1F5F9;color:#94A3B8}
+.dpg{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.dg{font-size:11px;padding:3px 10px;border-radius:20px;white-space:nowrap;display:inline-block;font-weight:700;letter-spacing:.01em}
+.gd{background:#D1FAE5;color:#065F46}
+.gp{background:#DBEAFE;color:#1E40AF}
+.gn{background:var(--primary-bg);color:var(--primary)}
+.gs{background:#F3F4F6;color:#6B7280}
+
+/* ── 퀴즈 ── */
 .quiz{padding:.8rem .8rem 2.5rem}
-.qnav{display:flex;align-items:center;gap:9px;margin-bottom:.8rem}
-.bbtn{background:white;border:1.5px solid #E0E7FF;border-radius:10px;padding:9px 14px;font-size:14px;cursor:pointer;color:#4338CA;font-weight:600}
+.qnav{display:flex;align-items:center;gap:9px;margin-bottom:.9rem}
+.bbtn{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:9px 14px;
+  font-size:14px;cursor:pointer;
+  color:var(--primary);font-weight:700;
+  transition:all .15s;
+  font-family:inherit;
+}
+.bbtn:active{transform:scale(.96)}
 .qi{flex:1}
-.qd{font-size:11px;color:#888;font-weight:600}
-.qtit{font-size:14px;font-weight:700;color:#1a1a2e}
-.qc{font-size:15px;font-weight:700;color:#4338CA;white-space:nowrap;background:#E0E7FF;padding:5px 10px;border-radius:10px}
-.qc.rev{background:#FFF3E0;color:#E65100}
-.revbadge{font-size:11px;font-weight:700;color:#E65100;background:#FFF3E0;padding:3px 10px;border-radius:20px;margin-bottom:.5rem;display:inline-block}
-.qbar{height:6px;background:#E0E7FF;border-radius:3px;overflow:hidden;margin-bottom:.9rem}
-.qfill{height:100%;background:linear-gradient(90deg,#4338CA,#7C3AED);border-radius:3px;transition:width .4s}
-.qfill.rev{background:linear-gradient(90deg,#FF8F00,#F4511E)}
-.ill{border-radius:16px;overflow:hidden;margin-bottom:.9rem;line-height:0;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.qd{font-size:11px;color:var(--text-3);font-weight:600;letter-spacing:.03em}
+.qtit{font-size:13px;font-weight:700;color:var(--text);margin-top:1px}
+.qc{
+  font-size:14px;font-weight:800;
+  color:var(--primary);
+  white-space:nowrap;
+  background:var(--primary-bg);
+  padding:5px 11px;border-radius:20px;
+  letter-spacing:-.01em;
+}
+.qc.rev{background:var(--warn-bg);color:var(--warn)}
+.revbadge{
+  font-size:11px;font-weight:700;color:var(--warn);
+  background:var(--warn-bg);
+  padding:4px 12px;border-radius:20px;
+  margin-bottom:.6rem;display:inline-block;
+  border:1px solid #FDE68A;
+}
+.qbar{height:5px;background:var(--primary-bg);border-radius:3px;overflow:hidden;margin-bottom:1rem}
+.qfill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.qfill.rev{background:linear-gradient(90deg,var(--warn),#EF4444)}
+
+.ill{border-radius:var(--radius-md);overflow:hidden;margin-bottom:.9rem;line-height:0;box-shadow:var(--shadow-sm)}
 .ill svg{display:block;width:100%}
-.sit{background:white;border-radius:14px;padding:13px 15px;margin-bottom:11px;font-size:15px;color:#555;line-height:1.8;border:1.5px solid #E8E8F0}
-.sit strong{color:#4338CA;font-weight:700}
-.qt{font-size:18px;font-weight:700;color:#1a1a2e;line-height:1.5;margin-bottom:14px}
-.ops{display:flex;flex-direction:column;gap:10px}
-.op{border:1.5px solid #E0E7FF;border-radius:13px;padding:14px 15px;font-size:15px;color:#333;cursor:pointer;text-align:left;background:white;line-height:1.55;display:flex;align-items:flex-start;gap:11px;width:100%}
-.op:not(.dis):active{transform:scale(.99)}
-.on{width:29px;height:29px;border-radius:50%;background:#E0E7FF;color:#4338CA;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.op.oc{background:#F0FFF4;border-color:#38A169;color:#276749}.op.oc .on{background:#38A169;color:#fff}
-.op.ow{background:#FFF5F5;border-color:#E53E3E;color:#9B2C2C}.op.ow .on{background:#E53E3E;color:#fff}
+
+.sit{
+  background:var(--card);
+  border-radius:var(--radius-md);
+  padding:14px 16px;
+  margin-bottom:12px;
+  font-size:14.5px;color:var(--text-2);
+  line-height:1.85;
+  border:1.5px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+.sit strong{color:var(--primary);font-weight:700}
+
+.qt{font-size:17px;font-weight:800;color:var(--text);line-height:1.55;margin-bottom:14px;letter-spacing:-.02em}
+.ops{display:flex;flex-direction:column;gap:9px}
+.op{
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:14px 15px;
+  font-size:14.5px;color:var(--text);
+  cursor:pointer;text-align:left;
+  background:var(--card);
+  line-height:1.6;
+  display:flex;align-items:flex-start;gap:11px;
+  width:100%;
+  transition:all .18s cubic-bezier(.4,0,.2,1);
+  box-shadow:var(--shadow-sm);
+  font-family:inherit;font-weight:500;
+}
+.op:not(.dis):active{transform:scale(.985);box-shadow:none}
+.op:not(.dis):hover{border-color:var(--primary-light);box-shadow:var(--shadow-md)}
+.on{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--primary-bg);color:var(--primary);
+  font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;
+  transition:all .18s;
+}
+.op.oc{background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border-color:#6EE7B7;color:#065F46}
+.op.oc .on{background:var(--success);color:#fff}
+.op.ow{background:linear-gradient(135deg,#FEF2F2,#FFF1F1);border-color:#FCA5A5;color:#991B1B}
+.op.ow .on{background:var(--danger);color:#fff}
 .op.dis{cursor:default;pointer-events:none}
-.fbx{margin-top:13px;border-radius:14px;padding:14px 16px;display:none}
-.fbx.sh{display:block}
-.fbx.ok{background:#F0FFF4;border:1.5px solid #38A169}
-.fbx.no{background:#FFF5F5;border:1.5px solid #E53E3E}
-.fb-key{font-size:12px;font-weight:700;color:#4338CA;margin:12px 0 4px;letter-spacing:.02em}
+
+.fbx{margin-top:12px;border-radius:var(--radius-md);padding:15px 17px;display:none}
+.fbx.sh{display:block;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fbx.ok{background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border:1.5px solid #6EE7B7}
+.fbx.no{background:linear-gradient(135deg,#FEF2F2,#FFF1F1);border:1.5px solid #FCA5A5}
+.fb-key{font-size:11px;font-weight:800;color:var(--primary);margin:12px 0 4px;letter-spacing:.06em;text-transform:uppercase}
 .fb-key:first-child{margin-top:0}
-.fb-point{font-size:14px;color:#1a1a2e;font-weight:600;line-height:1.65}
-.fb-point strong{color:#C53030;font-weight:700}
-.fb-sub{font-size:13.5px;color:#555;line-height:1.7;margin-top:3px}
-.fb-ex{font-size:13.5px;color:#374151;line-height:1.75;background:#F0F4FF;padding:10px 13px;border-radius:9px;margin-top:4px}
-.qquote{display:block;margin:4px 0;padding:9px 12px;background:rgba(67,56,202,.07);border-left:3px solid #4338CA;border-radius:0 9px 9px 0;font-size:13px;color:#4a4a6a;font-style:italic;line-height:1.75}
-.rtbtn{margin-top:10px;width:100%;padding:14px;border-radius:13px;border:1.5px solid #E53E3E;background:white;color:#C53030;font-size:15px;font-weight:700;cursor:pointer;display:none}
+.fb-point{font-size:14px;color:var(--text);font-weight:700;line-height:1.65}
+.fb-point strong{color:var(--danger);font-weight:800}
+.fb-sub{font-size:13px;color:var(--text-2);line-height:1.75;margin-top:4px;font-weight:500}
+.fb-ex{
+  font-size:13px;color:var(--text-2);line-height:1.8;
+  background:rgba(99,102,241,.06);
+  padding:11px 14px;border-radius:10px;margin-top:6px;
+  border-left:3px solid var(--primary-light);
+  font-weight:500;
+}
+.qquote{
+  display:block;margin:6px 0;
+  padding:10px 13px;
+  background:rgba(55,48,163,.06);
+  border-left:3px solid var(--primary);
+  border-radius:0 10px 10px 0;
+  font-size:13px;color:#3730A3;
+  font-style:italic;line-height:1.8;font-weight:500;
+}
+
+.rtbtn{
+  margin-top:10px;width:100%;padding:14px;
+  border-radius:var(--radius-md);
+  border:1.5px solid #FCA5A5;
+  background:var(--card);color:var(--danger);
+  font-size:15px;font-weight:700;cursor:pointer;
+  display:none;transition:all .15s;font-family:inherit;
+}
 .rtbtn.sh{display:block}.rtbtn:active{transform:scale(.98)}
-.nb{margin-top:11px;width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#4338CA,#7C3AED);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:none;box-shadow:0 4px 14px rgba(67,56,202,.35)}
-.nb.sh{display:block}.nb:active{transform:scale(.98)}
-.nb.rev{background:linear-gradient(135deg,#FF8F00,#F4511E);box-shadow:0 4px 14px rgba(244,81,30,.35)}
-.prevbtn{margin-top:8px;width:100%;padding:12px;border-radius:13px;border:1.5px solid #E0E7FF;background:white;color:#666;font-size:14px;font-weight:600;cursor:pointer;display:none}
+
+.nb{
+  margin-top:12px;width:100%;padding:16px;
+  border-radius:var(--radius-md);border:none;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;font-size:16px;font-weight:800;
+  cursor:pointer;display:none;
+  box-shadow:0 6px 20px rgba(55,48,163,.35);
+  transition:all .18s cubic-bezier(.4,0,.2,1);
+  letter-spacing:-.01em;font-family:inherit;
+}
+.nb.sh{display:block}
+.nb:active{transform:scale(.98);box-shadow:0 2px 8px rgba(55,48,163,.25)}
+.nb.rev{
+  background:linear-gradient(135deg,var(--warn),#EF4444);
+  box-shadow:0 6px 20px rgba(239,68,68,.3);
+}
+
+.prevbtn{
+  margin-top:8px;width:100%;padding:12px;
+  border-radius:var(--radius-md);
+  border:1.5px solid var(--border);
+  background:var(--card);color:var(--text-3);
+  font-size:14px;font-weight:600;cursor:pointer;
+  display:none;transition:all .15s;font-family:inherit;
+}
 .prevbtn.sh{display:block}.prevbtn:active{transform:scale(.98)}
-.donew{text-align:center;padding:2rem 1rem}
-.de{font-size:52px;margin-bottom:10px}
-.dt2{font-size:21px;font-weight:700;color:#1a1a2e;margin-bottom:5px}
-.ds2{font-size:42px;font-weight:700;color:#4338CA;margin:10px 0 4px}
-.dm{font-size:14px;color:#666;line-height:1.7;margin-bottom:16px}
-.wrong-box{background:#FFF5F5;border:1.5px solid #FEB2B2;border-radius:14px;padding:13px 16px;margin-bottom:14px;text-align:center}
-.wrong-cnt{font-size:16px;font-weight:700;color:#C53030;margin-bottom:4px}
-.wrong-sub{font-size:13px;color:#888}
-.hb{width:100%;padding:14px;border-radius:14px;border:2px solid #4338CA;background:white;color:#4338CA;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px}
+
+/* ── 완료 화면 ── */
+.donew{text-align:center;padding:2.5rem 1rem}
+.de{font-size:56px;margin-bottom:12px;display:block;animation:bounce .6s ease}
+@keyframes bounce{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.dt2{font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px;letter-spacing:-.03em}
+.ds2{font-size:48px;font-weight:800;color:var(--primary);margin:12px 0 6px;letter-spacing:-.04em}
+.dm{font-size:14px;color:var(--text-3);line-height:1.75;margin-bottom:20px;font-weight:500}
+.wrong-box{
+  background:linear-gradient(135deg,#FEF2F2,#FFF1F1);
+  border:1.5px solid #FCA5A5;
+  border-radius:var(--radius-md);
+  padding:14px 18px;margin-bottom:14px;text-align:center;
+}
+.wrong-cnt{font-size:16px;font-weight:800;color:var(--danger);margin-bottom:4px}
+.wrong-sub{font-size:13px;color:var(--text-3);font-weight:500}
+.hb{
+  width:100%;padding:14px;
+  border-radius:var(--radius-md);
+  border:2px solid var(--primary);
+  background:var(--card);color:var(--primary);
+  font-size:15px;font-weight:700;cursor:pointer;
+  margin-bottom:9px;transition:all .15s;font-family:inherit;
+}
 .hb:active{transform:scale(.98)}
-.hb.rev{border-color:#E65100;color:#E65100}
-.hb.sec{border-color:#E0E7FF;color:#666;font-weight:600}
-.revdone-box{background:#FFF3E0;border:1.5px solid #FFCC80;border-radius:14px;padding:16px;margin-bottom:16px}
-.revdone-txt{font-size:15px;color:#E65100;font-weight:600;line-height:1.6}
+.hb:hover{background:var(--primary-bg)}
+.hb.rev{border-color:var(--warn);color:var(--warn)}
+.hb.rev:hover{background:var(--warn-bg)}
+.hb.sec{border-color:var(--border);color:var(--text-3);font-weight:600}
+.hb.sec:hover{background:#F9FAFB}
+
+.revdone-box{
+  background:linear-gradient(135deg,var(--warn-bg),#FFF7ED);
+  border:1.5px solid #FDE68A;
+  border-radius:var(--radius-md);
+  padding:18px;margin-bottom:16px;
+}
+.revdone-txt{font-size:15px;color:var(--warn);font-weight:700;line-height:1.7}
 </style>
 </head>
 <body>
@@ -287,7 +508,656 @@ function svgBath2(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2
 <text x="130" y="53" font-size="10" fill="#555" text-anchor="middle">상호존중 안내: 연 1회 이상</text>
 </svg>`;}
 
-const SC={bath:svgBath,desk:svgDesk,visit:svgVisit,record:svgRecord,ill:svgIll,ctrt:svgCtrt,cal:svgCal,mtg:svgMtg,fam:svgFam,svgDoc:svgDoc,svgGoal:svgGoal,svgEval2:svgEval2,svgCase2:svgCase2,svgTraining:svgTraining,svgStaff:svgStaff,svgBoard:svgBoard,svgBath2:svgBath2};
+
+function svgTimePlan(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF8E1"/>
+<circle cx="100" cy="83" r="65" fill="white" stroke="#F9A825" stroke-width="2"/>
+<path d="M100,83 L100,25 A58,58 0 0,1 150,108 Z" fill="#4338CA" opacity=".85"/>
+<path d="M100,83 L150,108 A58,58 0 0,1 55,122 Z" fill="#E53935" opacity=".85"/>
+<path d="M100,83 L55,122 A58,58 0 0,1 100,25 Z" fill="#43A047" opacity=".85"/>
+<circle cx="100" cy="83" r="16" fill="white"/>
+<text x="100" y="88" font-size="10" fill="#333" text-anchor="middle" font-weight="700">시간</text>
+<rect x="175" y="28" width="140" height="22" rx="5" fill="#E3F2FD"/>
+<rect x="183" y="33" width="12" height="12" rx="2" fill="#4338CA"/>
+<text x="200" y="43" font-size="11" fill="#1565C0" font-weight="600">신체 180분</text>
+<rect x="175" y="55" width="140" height="22" rx="5" fill="#FFCCBC"/>
+<rect x="183" y="60" width="12" height="12" rx="2" fill="#E53935"/>
+<text x="200" y="70" font-size="11" fill="#BF360C" font-weight="600">정서 60분 미만</text>
+<rect x="175" y="82" width="140" height="22" rx="5" fill="#C8E6C9"/>
+<rect x="183" y="87" width="12" height="12" rx="2" fill="#43A047"/>
+<text x="200" y="97" font-size="11" fill="#1B5E20" font-weight="600">가사 90분 이내</text>
+<rect x="175" y="112" width="280" height="28" rx="8" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+<text x="315" y="130" font-size="11" fill="#E65100" text-anchor="middle" font-weight="700">⚠️ 정서 60분 이상 · 가사 90분 초과 = 위반</text>
+</svg>`;}
+
+function svgCogExclude(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#F3E5F5"/>
+<ellipse cx="130" cy="75" rx="55" ry="48" fill="#CE93D8" stroke="#AB47BC" stroke-width="2"/>
+<ellipse cx="113" cy="65" rx="18" ry="14" fill="#BA68C8"/>
+<ellipse cx="147" cy="58" rx="16" ry="12" fill="#BA68C8"/>
+<ellipse cx="155" cy="82" rx="14" ry="11" fill="#BA68C8"/>
+<ellipse cx="108" cy="88" rx="16" ry="12" fill="#BA68C8"/>
+<circle cx="130" cy="75" r="10" fill="white" opacity=".4"/>
+<circle cx="220" cy="75" r="38" fill="none" stroke="#E53935" stroke-width="5"/>
+<line x1="193" y1="48" x2="247" y2="102" stroke="#E53935" stroke-width="5"/>
+<rect x="280" y="20" width="180" height="130" rx="10" fill="white" stroke="#CE93D8" stroke-width="1.5"/>
+<text x="370" y="42" font-size="11" fill="#6A1B9A" text-anchor="middle" font-weight="700">인지활동 제외 원칙</text>
+<line x1="290" y1="50" x2="450" y2="50" stroke="#E1BEE7" stroke-width="1"/>
+<rect x="290" y="58" width="150" height="18" rx="4" fill="#FFCCBC"/>
+<text x="365" y="71" font-size="10" fill="#BF360C" text-anchor="middle">인지활동지원 ← 제외</text>
+<rect x="290" y="80" width="150" height="18" rx="4" fill="#FFCCBC"/>
+<text x="365" y="93" font-size="10" fill="#BF360C" text-anchor="middle">인지관리지원 ← 제외</text>
+<rect x="290" y="105" width="150" height="28" rx="6" fill="#E8F5E9"/>
+<text x="365" y="117" font-size="9" fill="#1B5E20" text-anchor="middle">제외 사유를</text>
+<text x="365" y="128" font-size="9" fill="#1B5E20" text-anchor="middle">종합의견에 기재 ✓</text>
+</svg>`;}
+
+function svgRetro(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF3E0"/>
+<rect x="30" y="20" width="175" height="130" rx="8" fill="white" stroke="#FF8F00" stroke-width="2"/>
+<rect x="30" y="20" width="175" height="24" rx="8" fill="#FF8F00"/><rect x="30" y="36" width="175" height="8" fill="#FF8F00"/>
+<text x="117" y="33" font-size="10" fill="white" text-anchor="middle" font-weight="700">📅 지난달 기록</text>
+<line x1="40" y1="55" x2="195" y2="55" stroke="#FFE0B2" stroke-width="1"/>
+<rect x="40" y="60" width="155" height="14" rx="3" fill="#F5F5F5"/>
+<text x="45" y="71" font-size="9" fill="#999">10월 평가서 (미작성)</text>
+<rect x="40" y="79" width="155" height="14" rx="3" fill="#F5F5F5"/>
+<text x="45" y="90" font-size="9" fill="#999">11월 평가서 (미작성)</text>
+<circle cx="175" cy="110" r="28" fill="none" stroke="#E53935" stroke-width="4"/>
+<line x1="155" y1="90" x2="195" y2="130" stroke="#E53935" stroke-width="4"/>
+<text x="130" y="148" font-size="9" fill="#E65100" text-anchor="middle">직접 소급 불가</text>
+<rect x="230" y="20" width="220" height="130" rx="8" fill="white" stroke="#43A047" stroke-width="2"/>
+<rect x="230" y="20" width="220" height="24" rx="8" fill="#43A047"/><rect x="230" y="36" width="220" height="8" fill="#43A047"/>
+<text x="340" y="33" font-size="10" fill="white" text-anchor="middle" font-weight="700">✅ 자체 서식으로 관리</text>
+<line x1="240" y1="55" x2="440" y2="55" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="240" y="62" width="200" height="18" rx="4" fill="#E8F5E9"/>
+<text x="340" y="75" font-size="9.5" fill="#1B5E20" text-anchor="middle">자체 서식 별도 작성</text>
+<rect x="240" y="84" width="200" height="18" rx="4" fill="#E8F5E9"/>
+<text x="340" y="97" font-size="9.5" fill="#1B5E20" text-anchor="middle">기존 기록 수정 없이 보완</text>
+<rect x="240" y="106" width="200" height="18" rx="4" fill="#E8F5E9"/>
+<text x="340" y="119" font-size="9.5" fill="#1B5E20" text-anchor="middle">기록 조작 의심 차단</text>
+</svg>`;}
+
+function svgOpinion(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFFDE7"/>
+<rect x="25" y="15" width="200" height="140" rx="8" fill="white" stroke="#9FA8DA" stroke-width="1.5"/>
+<rect x="25" y="15" width="200" height="20" rx="8" fill="#3949AB"/><rect x="25" y="27" width="200" height="8" fill="#3949AB"/>
+<text x="125" y="27" font-size="9" fill="white" text-anchor="middle" font-weight="700">욕구사정 총평</text>
+<rect x="33" y="42" width="184" height="8" rx="2" fill="#E8EAF6"/>
+<rect x="33" y="55" width="184" height="8" rx="2" fill="#E8EAF6"/>
+<rect x="33" y="68" width="140" height="8" rx="2" fill="#E8EAF6"/>
+<rect x="33" y="81" width="184" height="8" rx="2" fill="#E8EAF6"/>
+<rect x="33" y="94" width="184" height="8" rx="2" fill="#E8EAF6"/>
+<rect x="33" y="107" width="100" height="8" rx="2" fill="#E8EAF6"/>
+<text x="125" y="135" font-size="9" fill="#888" text-anchor="middle">분량 100%</text>
+<text x="240" y="85" font-size="28" fill="#FF8F00" text-anchor="middle">→</text>
+<text x="240" y="103" font-size="9" fill="#E65100" text-anchor="middle" font-weight="700">절반</text>
+<rect x="265" y="15" width="190" height="140" rx="8" fill="white" stroke="#F9A825" stroke-width="2"/>
+<rect x="265" y="15" width="190" height="20" rx="8" fill="#F9A825"/><rect x="265" y="27" width="190" height="8" fill="#F9A825"/>
+<text x="360" y="27" font-size="9" fill="white" text-anchor="middle" font-weight="700">종합의견</text>
+<text x="360" y="48" font-size="9" fill="#F57F17" text-anchor="middle" font-weight="700">① 기능상태·환경</text>
+<rect x="273" y="52" width="174" height="8" rx="2" fill="#FFF9C4"/>
+<rect x="273" y="64" width="174" height="8" rx="2" fill="#FFF9C4"/>
+<text x="360" y="82" font-size="9" fill="#F57F17" text-anchor="middle" font-weight="700">② 서비스 제공방향</text>
+<rect x="273" y="86" width="174" height="8" rx="2" fill="#FFF9C4"/>
+<text x="360" y="105" font-size="9" fill="#F57F17" text-anchor="middle" font-weight="700">③ 유의사항</text>
+<rect x="273" y="109" width="174" height="8" rx="2" fill="#FFF9C4"/>
+<text x="360" y="135" font-size="9" fill="#888" text-anchor="middle">분량 50%</text>
+</svg>`;}
+
+function svgNutrition(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF3E0"/>
+<circle cx="110" cy="80" r="55" fill="white" stroke="#FF8F00" stroke-width="2"/>
+<path d="M85,55 Q90,50 95,55 Q100,45 105,55 Q110,50 115,55 Q90,95 80,90 Q70,85 85,55Z" fill="#FFCCBC" stroke="#FF8F00" stroke-width="1.5"/>
+<path d="M90,58 L88,90" stroke="#FF8F00" stroke-width="1.5"/>
+<path d="M95,53 L95,90" stroke="#FF8F00" stroke-width="1.5"/>
+<path d="M102,54 L102,90" stroke="#FF8F00" stroke-width="1.5"/>
+<path d="M109,54 L109,90" stroke="#FF8F00" stroke-width="1.5"/>
+<text x="110" y="116" font-size="9" fill="#E65100" text-anchor="middle">치아·임플란트</text>
+<line x1="170" y1="80" x2="200" y2="80" stroke="#FF8F00" stroke-width="2" stroke-dasharray="4"/>
+<text x="185" y="70" font-size="10" fill="#E65100" text-anchor="middle">→</text>
+<rect x="205" y="20" width="255" height="130" rx="8" fill="white" stroke="#FF8F00" stroke-width="1.5"/>
+<text x="332" y="38" font-size="11" fill="#E65100" text-anchor="middle" font-weight="700">기재 위치 비교</text>
+<line x1="215" y1="45" x2="450" y2="45" stroke="#FFE0B2" stroke-width="1"/>
+<rect x="215" y="52" width="115" height="30" rx="5" fill="#FFCCBC"/>
+<text x="272" y="64" font-size="9.5" fill="#BF360C" text-anchor="middle">❌ 구강기능 항목</text>
+<text x="272" y="76" font-size="9" fill="#BF360C" text-anchor="middle">치아는 여기 아님</text>
+<rect x="340" y="52" width="105" height="30" rx="5" fill="#C8E6C9"/>
+<text x="392" y="64" font-size="9.5" fill="#1B5E20" text-anchor="middle">✅ 영양상태 항목</text>
+<text x="392" y="76" font-size="9" fill="#1B5E20" text-anchor="middle">여기에 기재</text>
+<rect x="215" y="90" width="230" height="50" rx="6" fill="#FFF9C4"/>
+<text x="330" y="107" font-size="10" fill="#E65100" text-anchor="middle" font-weight="700">임플란트 시술 → 음식 섭취 제한</text>
+<text x="330" y="124" font-size="9.5" fill="#555" text-anchor="middle">→ 영양상태 항목에 기재해주세요</text>
+</svg>`;}
+
+function svgZeroMin(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF5F5"/>
+<rect x="40" y="25" width="150" height="120" rx="12" fill="white" stroke="#EF5350" stroke-width="2"/>
+<text x="115" y="80" font-size="72" fill="#FFCDD2" text-anchor="middle" font-weight="800">0</text>
+<text x="115" y="105" font-size="13" fill="#FFCDD2" text-anchor="middle" font-weight="600">분</text>
+<circle cx="115" cy="83" r="50" fill="none" stroke="#E53935" stroke-width="6"/>
+<line x1="79" y1="47" x2="151" y2="119" stroke="#E53935" stroke-width="6"/>
+<text x="115" y="135" font-size="10" fill="#C53030" text-anchor="middle" font-weight="700">0분 입력 차단됨</text>
+<text x="310" y="48" font-size="13" fill="#1B5E20" text-anchor="middle" font-weight="700">최소 5분 입력 필수</text>
+<rect x="230" y="58" width="215" height="55" rx="12" fill="white" stroke="#43A047" stroke-width="2"/>
+<text x="337" y="82" font-size="52" fill="#C8E6C9" text-anchor="middle" font-weight="800">5</text>
+<text x="337" y="102" font-size="11" fill="#C8E6C9" text-anchor="middle" font-weight="600">분</text>
+<circle cx="337" cy="83" r="25" fill="#43A047" opacity=".15"/>
+<text x="337" y="88" font-size="36" fill="#43A047" text-anchor="middle" font-weight="800">5</text>
+<text x="337" y="130" font-size="10" fill="#388E3C" text-anchor="middle">단 5분이라도 입력해야 함</text>
+</svg>`;}
+
+function svgFood(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF8E1"/>
+<rect x="20" y="15" width="200" height="140" rx="8" fill="white" stroke="#F9A825" stroke-width="2"/>
+<rect x="20" y="15" width="200" height="22" rx="8" fill="#F9A825"/><rect x="20" y="29" width="200" height="8" fill="#F9A825"/>
+<text x="120" y="27" font-size="10" fill="white" text-anchor="middle" font-weight="700">🍽️ 통합사정 종합의견</text>
+<text x="30" y="57" font-size="10" fill="#333" font-weight="700">주요 기능상태</text>
+<rect x="30" y="62" width="180" height="10" rx="2" fill="#FFF9C4"/>
+<text x="30" y="85" font-size="10" fill="#333" font-weight="700">서비스 제공방향</text>
+<rect x="30" y="90" width="180" height="10" rx="2" fill="#FFF9C4"/>
+<rect x="30" y="110" width="180" height="22" rx="5" fill="#FFCCBC" stroke="#FF8F00" stroke-width="1.5"/>
+<text x="120" y="120" font-size="9" fill="#BF360C" text-anchor="middle" font-weight="700">⭐ 2026년 추가</text>
+<text x="120" y="130" font-size="9" fill="#BF360C" text-anchor="middle">기피식품 항목</text>
+<rect x="240" y="20" width="220" height="130" rx="8" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="350" y="38" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">기피식품 예시</text>
+<line x1="250" y1="45" x2="450" y2="45" stroke="#C8E6C9" stroke-width="1"/>
+<text x="258" y="63" font-size="11">🧄</text><text x="278" y="63" font-size="10" fill="#555">마늘류 싫어하심</text>
+<text x="258" y="83" font-size="11">🥚</text><text x="278" y="83" font-size="10" fill="#555">계란 알레르기</text>
+<text x="258" y="103" font-size="11">🌶️</text><text x="278" y="103" font-size="10" fill="#555">매운 음식 금지</text>
+<text x="258" y="123" font-size="11">🐟</text><text x="278" y="123" font-size="10" fill="#555">생선 냄새 거부</text>
+<rect x="240" y="135" width="220" height="12" rx="3" fill="#E8F5E9"/>
+<text x="350" y="144" font-size="8.5" fill="#388E3C" text-anchor="middle">→ 2026년부터 종합의견 필수 기재</text>
+</svg>`;}
+
+function svgStructure3(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E8F5E9"/>
+<rect x="20" y="20" width="440" height="130" rx="10" fill="white" stroke="#43A047" stroke-width="2"/>
+<text x="240" y="40" font-size="12" fill="#2E7D32" text-anchor="middle" font-weight="700">종합의견 3단 구조</text>
+<line x1="30" y1="48" x2="450" y2="48" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="35" y="56" width="120" height="70" rx="8" fill="#E3F2FD" stroke="#1E88E5" stroke-width="1.5"/>
+<text x="95" y="76" font-size="22" fill="#1E88E5" text-anchor="middle">①</text>
+<text x="95" y="97" font-size="9" fill="#1565C0" text-anchor="middle" font-weight="700">주요 기능상태</text>
+<text x="95" y="111" font-size="9" fill="#1565C0" text-anchor="middle">및 환경</text>
+<text x="175" y="94" font-size="22" fill="#4338CA">→</text>
+<rect x="185" y="56" width="120" height="70" rx="8" fill="#FFF3E0" stroke="#FF8F00" stroke-width="1.5"/>
+<text x="245" y="76" font-size="22" fill="#FF8F00" text-anchor="middle">②</text>
+<text x="245" y="97" font-size="9" fill="#E65100" text-anchor="middle" font-weight="700">서비스</text>
+<text x="245" y="111" font-size="9" fill="#E65100" text-anchor="middle">제공방향</text>
+<text x="325" y="94" font-size="22" fill="#4338CA">→</text>
+<rect x="335" y="56" width="120" height="70" rx="8" fill="#F3E5F5" stroke="#8E24AA" stroke-width="1.5"/>
+<text x="395" y="76" font-size="22" fill="#8E24AA" text-anchor="middle">③</text>
+<text x="395" y="97" font-size="9" fill="#6A1B9A" text-anchor="middle" font-weight="700">유의사항</text>
+<text x="395" y="111" font-size="9" fill="#6A1B9A" text-anchor="middle">특이사항</text>
+<rect x="35" y="135" width="420" height="10" rx="3" fill="#C8E6C9"/>
+<text x="240" y="143" font-size="8.5" fill="#1B5E20" text-anchor="middle">순서 바꾸면 감점 — 반드시 ① → ② → ③ 순서</text>
+</svg>`;}
+
+function svgHoliday(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E8F5E9"/>
+<rect x="20" y="15" width="200" height="140" rx="8" fill="white" stroke="#43A047" stroke-width="2"/>
+<rect x="20" y="15" width="200" height="24" rx="8" fill="#43A047"/><rect x="20" y="31" width="200" height="8" fill="#43A047"/>
+<text x="120" y="28" font-size="10" fill="white" text-anchor="middle" font-weight="700">공휴일 문구 있음 ✓</text>
+<rect x="30" y="46" width="180" height="22" rx="5" fill="#E8F5E9" stroke="#43A047" stroke-width="1"/>
+<text x="120" y="60" font-size="9" fill="#1B5E20" text-anchor="middle">"공휴일에도 서비스 제공 가능"</text>
+<text x="45" y="85" font-size="11">📅</text><text x="63" y="85" font-size="10" fill="#555">설날</text><text x="100" y="85" font-size="16" fill="#43A047">✓</text>
+<text x="45" y="103" font-size="11">📅</text><text x="63" y="103" font-size="10" fill="#555">추석</text><text x="100" y="103" font-size="16" fill="#43A047">✓</text>
+<text x="45" y="121" font-size="11">📅</text><text x="63" y="121" font-size="10" fill="#555">어린이날</text><text x="115" y="121" font-size="16" fill="#43A047">✓</text>
+<text x="120" y="143" font-size="9" fill="#388E3C" text-anchor="middle" font-weight="700">건건 기재 불필요</text>
+<rect x="240" y="15" width="220" height="140" rx="8" fill="white" stroke="#E53935" stroke-width="2"/>
+<rect x="240" y="15" width="220" height="24" rx="8" fill="#E53935"/><rect x="240" y="31" width="220" height="8" fill="#E53935"/>
+<text x="350" y="28" font-size="10" fill="white" text-anchor="middle" font-weight="700">공휴일 문구 없음 ✗</text>
+<rect x="250" y="46" width="200" height="22" rx="5" fill="#FFCDD2" stroke="#E53935" stroke-width="1"/>
+<text x="350" y="60" font-size="9" fill="#BF360C" text-anchor="middle">공휴일 관련 문구 없음</text>
+<text x="255" y="85" font-size="11">📅</text><text x="273" y="85" font-size="10" fill="#555">설날</text><text x="310" y="85" font-size="10" fill="#C53030" font-weight="700">기록 필수!</text>
+<text x="255" y="103" font-size="11">📅</text><text x="273" y="103" font-size="10" fill="#555">추석</text><text x="310" y="103" font-size="10" fill="#C53030" font-weight="700">기록 필수!</text>
+<text x="255" y="121" font-size="11">📅</text><text x="273" y="121" font-size="10" fill="#555">어린이날</text><text x="335" y="121" font-size="10" fill="#C53030" font-weight="700">기록 필수!</text>
+<text x="350" y="143" font-size="9" fill="#C53030" text-anchor="middle" font-weight="700">건건 기재 의무</text>
+</svg>`;}
+
+function svgFeeNotice(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E3F2FD"/>
+<rect x="30" y="20" width="180" height="130" rx="10" fill="white" stroke="#1E88E5" stroke-width="2"/>
+<text x="120" y="42" font-size="11" fill="#1565C0" text-anchor="middle" font-weight="700">💰 수가 변경</text>
+<line x1="40" y1="50" x2="200" y2="50" stroke="#BBDEFB" stroke-width="1"/>
+<rect x="40" y="58" width="140" height="22" rx="5" fill="#FFF9C4"/>
+<text x="110" y="67" font-size="9.5" fill="#E65100" text-anchor="middle">2025년 수가</text>
+<text x="110" y="75" font-size="9" fill="#E65100" text-anchor="middle">₩ 14,840원/시간</text>
+<text x="120" y="100" font-size="18" fill="#1E88E5" text-anchor="middle">↓</text>
+<rect x="40" y="108" width="140" height="22" rx="5" fill="#E3F2FD"/>
+<text x="110" y="117" font-size="9.5" fill="#1565C0" text-anchor="middle">2026년 수가</text>
+<text x="110" y="125" font-size="9" fill="#1565C0" text-anchor="middle">₩ 15,330원/시간</text>
+<rect x="40" y="136" width="140" height="10" rx="3" fill="#BBDEFB"/>
+<text x="110" y="144" font-size="8.5" fill="#1565C0" text-anchor="middle">공단 고시에 의한 변경</text>
+<rect x="230" y="30" width="225" height="60" rx="10" fill="#E8F5E9" stroke="#43A047" stroke-width="1.5"/>
+<text x="342" y="52" font-size="12" fill="#2E7D32" text-anchor="middle" font-weight="700">✅ 안내만 하면 됨</text>
+<text x="342" y="70" font-size="10" fill="#388E3C" text-anchor="middle">변경계약 불필요</text>
+<rect x="230" y="105" width="225" height="50" rx="10" fill="#FFCCBC" stroke="#E53935" stroke-width="1.5"/>
+<text x="342" y="123" font-size="11" fill="#C53030" text-anchor="middle" font-weight="700">❌ 수가 ≠ 계약 내용</text>
+<text x="342" y="140" font-size="9.5" fill="#C53030" text-anchor="middle">공단이 정함 → 센터 계약 아님</text>
+</svg>`;}
+
+function svgCaseReason(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#F3E5F5"/>
+<rect x="20" y="15" width="200" height="140" rx="8" fill="white" stroke="#AB47BC" stroke-width="2"/>
+<text x="120" y="35" font-size="11" fill="#6A1B9A" text-anchor="middle" font-weight="700">선정사유 작성 원칙</text>
+<line x1="30" y1="43" x2="210" y2="43" stroke="#E1BEE7" stroke-width="1"/>
+<rect x="30" y="50" width="180" height="35" rx="6" fill="#FFCCBC"/>
+<text x="120" y="63" font-size="9.5" fill="#BF360C" text-anchor="middle" font-weight="700">❌ 결론 미리 내놓기</text>
+<text x="120" y="78" font-size="9" fill="#BF360C" text-anchor="middle">"환경개선이 필요하다"</text>
+<rect x="30" y="93" width="180" height="35" rx="6" fill="#C8E6C9"/>
+<text x="120" y="106" font-size="9.5" fill="#1B5E20" text-anchor="middle" font-weight="700">✅ 현황 기술</text>
+<text x="120" y="121" font-size="9" fill="#1B5E20" text-anchor="middle">"건강이 염려된다"</text>
+<rect x="30" y="135" width="180" height="16" rx="4" fill="#E1BEE7"/>
+<text x="120" y="146" font-size="8.5" fill="#6A1B9A" text-anchor="middle">선정사유가 제일 중요!</text>
+<rect x="235" y="20" width="225" height="130" rx="10" fill="white" stroke="#AB47BC" stroke-width="1.5"/>
+<text x="347" y="42" font-size="11" fill="#6A1B9A" text-anchor="middle" font-weight="700">올바른 선정사유 예시</text>
+<line x1="245" y1="50" x2="450" y2="50" stroke="#E1BEE7" stroke-width="1"/>
+<text x="250" y="68" font-size="10" fill="#555">💚 "건강이 염려된다"</text>
+<text x="250" y="86" font-size="10" fill="#555">💚 "낙상위험이 높다"</text>
+<text x="250" y="104" font-size="10" fill="#555">💚 "욕창 발생 우려된다"</text>
+<text x="250" y="122" font-size="10" fill="#C53030">❌ "환경개선이 필요하다"</text>
+<text x="250" y="140" font-size="10" fill="#C53030">❌ "서비스 증대 필요하다"</text>
+</svg>`;}
+
+function svgFallTrain(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E8F5E9"/>
+<rect y="140" width="480" height="25" fill="#A5D6A7"/>
+<rect x="80" y="45" width="8" height="100" rx="3" fill="#6D4C41" stroke="#5D4037" stroke-width="1"/>
+<rect x="180" y="45" width="8" height="100" rx="3" fill="#6D4C41" stroke="#5D4037" stroke-width="1"/>
+<line x1="84" y1="85" x2="184" y2="85" stroke="#43A047" stroke-width="4"/>
+<circle cx="134" cy="52" r="14" fill="#FFCCAA"/>
+<path d="M121,47 Q124,38 134,36 Q144,38 147,47" fill="#5D4037"/>
+<ellipse cx="129" cy="50" rx="2" ry="2.5" fill="#333"/>
+<ellipse cx="139" cy="50" rx="2" ry="2.5" fill="#333"/>
+<path d="M130,58 Q134,61 138,58" stroke="#A0826D" stroke-width="1.5" fill="none"/>
+<rect x="117" y="66" width="34" height="40" rx="7" fill="#66BB6A"/>
+<line x1="117" y1="90" x2="104" y2="115" stroke="#FFCCAA" stroke-width="10" stroke-linecap="round"/>
+<line x1="151" y1="90" x2="164" y2="115" stroke="#FFCCAA" stroke-width="10" stroke-linecap="round"/>
+<rect x="119" y="106" width="10" height="16" rx="4" fill="#388E3C"/>
+<rect x="132" y="106" width="10" height="16" rx="4" fill="#388E3C"/>
+<rect x="220" y="20" width="245" height="130" rx="10" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="342" y="40" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">복지용구 + 훈련 연결 필수</text>
+<line x1="230" y1="48" x2="455" y2="48" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="230" y="55" width="120" height="18" rx="4" fill="#E3F2FD"/>
+<text x="290" y="68" font-size="9.5" fill="#1565C0" text-anchor="middle">안전손잡이 설치</text>
+<text x="360" y="66" font-size="14" fill="#43A047">→</text>
+<rect x="370" y="55" width="95" height="18" rx="4" fill="#E8F5E9"/>
+<text x="417" y="68" font-size="9.5" fill="#1B5E20" text-anchor="middle">근력 훈련 시작</text>
+<rect x="230" y="80" width="225" height="18" rx="4" fill="#E8F5E9"/>
+<text x="342" y="93" font-size="9" fill="#1B5E20" text-anchor="middle">1단계: 손잡이 잡고 서기 (1주)</text>
+<rect x="230" y="102" width="225" height="18" rx="4" fill="#E8F5E9"/>
+<text x="342" y="115" font-size="9" fill="#1B5E20" text-anchor="middle">2단계: 보조하에 5걸음 (2주)</text>
+<rect x="230" y="124" width="225" height="18" rx="4" fill="#E8F5E9"/>
+<text x="342" y="137" font-size="9" fill="#1B5E20" text-anchor="middle">3단계: 자립보행 시도 (4주)</text>
+</svg>`;}
+
+function svgMedical(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFEBEE"/>
+<rect x="30" y="25" width="140" height="120" rx="8" fill="white" stroke="#EF5350" stroke-width="2"/>
+<rect x="75" y="45" width="50" height="50" rx="4" fill="#EF5350"/>
+<rect x="65" y="55" width="70" height="30" rx="4" fill="#EF5350"/>
+<circle cx="100" cy="55" r="20" fill="white"/>
+<text x="100" y="62" font-size="22" fill="#EF5350" text-anchor="middle" font-weight="700">+</text>
+<text x="100" y="120" font-size="9" fill="#555" text-anchor="middle">의료적 문제</text>
+<text x="100" y="133" font-size="8.5" fill="#888" text-anchor="middle">(욕창치료, 통증 등)</text>
+<circle cx="205" cy="83" r="30" fill="none" stroke="#E53935" stroke-width="5"/>
+<line x1="183" y1="61" x2="227" y2="105" stroke="#E53935" stroke-width="5"/>
+<rect x="245" y="20" width="215" height="130" rx="10" fill="white" stroke="#EF5350" stroke-width="1.5"/>
+<text x="352" y="40" font-size="11" fill="#C53030" text-anchor="middle" font-weight="700">요양보호사 역할 한계</text>
+<line x1="255" y1="48" x2="450" y2="48" stroke="#FFCDD2" stroke-width="1"/>
+<text x="260" y="65" font-size="10" fill="#C53030">❌ 욕창 치료 (의료행위)</text>
+<text x="260" y="83" font-size="10" fill="#C53030">❌ 통증 완화 치료</text>
+<text x="260" y="101" font-size="10" fill="#C53030">❌ 요양병원 입원 연계</text>
+<line x1="255" y1="110" x2="450" y2="110" stroke="#FFCDD2" stroke-width="1"/>
+<text x="260" y="127" font-size="10" fill="#388E3C">✅ 피부청결·체위변경</text>
+<text x="260" y="145" font-size="10" fill="#388E3C">✅ 요양보호사가 할 수 있는 것</text>
+</svg>`;}
+
+function svgLeave(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF3E0"/>
+<rect x="20" y="20" width="175" height="130" rx="8" fill="white" stroke="#FF8F00" stroke-width="2"/>
+<text x="107" y="40" font-size="11" fill="#E65100" text-anchor="middle" font-weight="700">✈️ 요양보호사 해외여행</text>
+<line x1="30" y1="48" x2="185" y2="48" stroke="#FFE0B2" stroke-width="1"/>
+<rect x="30" y="55" width="155" height="22" rx="5" fill="#FFF9C4"/>
+<text x="107" y="64" font-size="9.5" fill="#E65100" text-anchor="middle">2주간 연차 휴가</text>
+<text x="107" y="73" font-size="9" fill="#E65100" text-anchor="middle">→ 수급자 돌봄 공백?</text>
+<circle cx="107" cy="115" r="28" fill="none" stroke="#E53935" stroke-width="4"/>
+<text x="107" y="110" font-size="9" fill="#C53030" text-anchor="middle">사례관리</text>
+<text x="107" y="122" font-size="9" fill="#C53030" text-anchor="middle">대상 아님</text>
+<line x1="85" y1="95" x2="129" y2="135" stroke="#E53935" stroke-width="4"/>
+<rect x="210" y="20" width="250" height="130" rx="8" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="335" y="40" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">올바른 대응</text>
+<line x1="220" y1="48" x2="450" y2="48" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="220" y="55" width="230" height="22" rx="5" fill="#E8F5E9"/>
+<text x="335" y="65" font-size="9.5" fill="#1B5E20" text-anchor="middle">대체 요양보호사 투입</text>
+<text x="335" y="73" font-size="9" fill="#388E3C" text-anchor="middle">(행정·인력 관리 문제)</text>
+<rect x="220" y="83" width="230" height="22" rx="5" fill="#FFF9C4"/>
+<text x="335" y="93" font-size="9.5" fill="#E65100" text-anchor="middle">인수인계 철저히</text>
+<text x="335" y="102" font-size="9" fill="#E65100" text-anchor="middle">수급자 정보 전달</text>
+<rect x="220" y="111" width="230" height="30" rx="6" fill="#FFCCBC"/>
+<text x="335" y="124" font-size="9.5" fill="#BF360C" text-anchor="middle" font-weight="700">사례관리 ≠ 인력관리</text>
+<text x="335" y="136" font-size="9" fill="#BF360C" text-anchor="middle">이건 센터 행정 문제</text>
+</svg>`;}
+
+function svgCaseDebate(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#F3E5F5"/>
+<rect x="15" y="15" width="220" height="140" rx="8" fill="white" stroke="#AB47BC" stroke-width="2"/>
+<rect x="15" y="15" width="220" height="20" rx="8" fill="#7B1FA2"/><rect x="15" y="27" width="220" height="8" fill="#7B1FA2"/>
+<text x="125" y="27" font-size="9" fill="white" text-anchor="middle" font-weight="700">사례회의 기록 구조</text>
+<text x="25" y="52" font-size="10" fill="#6A1B9A" font-weight="700">논의 내용</text>
+<rect x="25" y="57" width="195" height="9" rx="2" fill="#E1BEE7"/>
+<rect x="25" y="70" width="195" height="9" rx="2" fill="#E1BEE7"/>
+<rect x="25" y="83" width="195" height="9" rx="2" fill="#E1BEE7"/>
+<rect x="25" y="96" width="195" height="9" rx="2" fill="#E1BEE7"/>
+<rect x="25" y="109" width="150" height="9" rx="2" fill="#E1BEE7"/>
+<text x="25" y="132" font-size="10" fill="#6A1B9A" font-weight="700">결론</text>
+<rect x="25" y="136" width="120" height="9" rx="2" fill="#CE93D8"/>
+<text x="155" y="143" font-size="9" fill="#AB47BC" font-weight="700">← 짧게</text>
+<rect x="250" y="15" width="220" height="140" rx="8" fill="white" stroke="#E53935" stroke-width="2"/>
+<rect x="250" y="15" width="220" height="20" rx="8" fill="#E53935"/><rect x="250" y="27" width="220" height="8" fill="#E53935"/>
+<text x="360" y="27" font-size="9" fill="white" text-anchor="middle" font-weight="700">❌ 잘못된 구조</text>
+<text x="260" y="52" font-size="10" fill="#C53030" font-weight="700">논의 내용</text>
+<rect x="260" y="57" width="195" height="9" rx="2" fill="#FFCDD2"/>
+<rect x="260" y="70" width="120" height="9" rx="2" fill="#FFCDD2"/>
+<text x="260" y="93" font-size="10" fill="#C53030" font-weight="700">결론/해결방안</text>
+<rect x="260" y="98" width="195" height="9" rx="2" fill="#FFCDD2"/>
+<rect x="260" y="111" width="195" height="9" rx="2" fill="#FFCDD2"/>
+<rect x="260" y="124" width="195" height="9" rx="2" fill="#FFCDD2"/>
+<rect x="260" y="137" width="150" height="9" rx="2" fill="#FFCDD2"/>
+<text x="420" y="143" font-size="9" fill="#C53030" font-weight="700">← 너무 김</text>
+</svg>`;}
+
+function svgIndirect(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF8E1"/>
+<rect x="20" y="20" width="200" height="130" rx="8" fill="white" stroke="#FF8F00" stroke-width="2"/>
+<text x="120" y="40" font-size="11" fill="#E65100" text-anchor="middle" font-weight="700">간접 해결책 (❌)</text>
+<line x1="30" y1="48" x2="210" y2="48" stroke="#FFE0B2" stroke-width="1"/>
+<rect x="30" y="55" width="180" height="18" rx="4" fill="#FFCCBC"/>
+<text x="120" y="68" font-size="10" fill="#BF360C" text-anchor="middle">모니터링만 실시</text>
+<rect x="30" y="78" width="180" height="18" rx="4" fill="#FFCCBC"/>
+<text x="120" y="91" font-size="10" fill="#BF360C" text-anchor="middle">인수인계만 실시</text>
+<rect x="30" y="101" width="180" height="18" rx="4" fill="#FFCCBC"/>
+<text x="120" y="114" font-size="10" fill="#BF360C" text-anchor="middle">경과 관찰만</text>
+<rect x="30" y="126" width="180" height="18" rx="4" fill="#FFCCBC"/>
+<text x="120" y="139" font-size="10" fill="#BF360C" text-anchor="middle">보호자 연락만</text>
+<rect x="240" y="20" width="220" height="130" rx="8" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="350" y="40" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">직접 해결책 (✅)</text>
+<line x1="250" y1="48" x2="450" y2="48" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="250" y="55" width="200" height="18" rx="4" fill="#C8E6C9"/>
+<text x="350" y="68" font-size="10" fill="#1B5E20" text-anchor="middle">기능회복훈련 계획 수립</text>
+<rect x="250" y="78" width="200" height="18" rx="4" fill="#C8E6C9"/>
+<text x="350" y="91" font-size="10" fill="#1B5E20" text-anchor="middle">복지용구 + 훈련 연결</text>
+<rect x="250" y="101" width="200" height="18" rx="4" fill="#C8E6C9"/>
+<text x="350" y="114" font-size="10" fill="#1B5E20" text-anchor="middle">구체적 단계별 계획</text>
+<rect x="250" y="124" width="200" height="18" rx="4" fill="#C8E6C9"/>
+<text x="350" y="137" font-size="10" fill="#1B5E20" text-anchor="middle">환경개선 직접 시행</text>
+</svg>`;}
+
+function svgEdu7(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E3F2FD"/>
+<rect x="20" y="15" width="155" height="140" rx="8" fill="white" stroke="#1E88E5" stroke-width="2"/>
+<rect x="20" y="15" width="155" height="22" rx="8" fill="#1E88E5"/><rect x="20" y="29" width="155" height="8" fill="#1E88E5"/>
+<text x="97" y="27" font-size="9" fill="white" text-anchor="middle" font-weight="700">📅 입사 후 7일</text>
+<text x="97" y="75" font-size="52" fill="#BBDEFB" text-anchor="middle" font-weight="800">7</text>
+<text x="97" y="98" font-size="11" fill="#1565C0" text-anchor="middle" font-weight="700">일 이내</text>
+<rect x="30" y="108" width="135" height="18" rx="4" fill="#FFF3E0"/>
+<text x="97" y="120" font-size="9" fill="#E65100" text-anchor="middle">초과 = 불인정!</text>
+<rect x="190" y="15" width="270" height="140" rx="8" fill="white" stroke="#1E88E5" stroke-width="1.5"/>
+<text x="325" y="35" font-size="11" fill="#1565C0" text-anchor="middle" font-weight="700">신입직원 교육 필수 기재</text>
+<line x1="200" y1="42" x2="450" y2="42" stroke="#BBDEFB" stroke-width="1"/>
+<text x="205" y="58" font-size="10" fill="#555">✓ 교육일시</text>
+<text x="205" y="75" font-size="10" fill="#555">✓ 교육강사</text>
+<text x="205" y="92" font-size="10" fill="#C53030" font-weight="700">✓ 교육방법 (누락 시 불인정!)</text>
+<text x="205" y="109" font-size="10" fill="#555">✓ 교육내용</text>
+<text x="205" y="126" font-size="10" fill="#C53030" font-weight="700">✓ 서명부 차수 표시 필수</text>
+<rect x="200" y="135" width="240" height="14" rx="4" fill="#BBDEFB"/>
+<text x="320" y="145" font-size="8.5" fill="#1565C0" text-anchor="middle">불참자 → 근무 전후 개별교육 실시</text>
+</svg>`;}
+
+function svgGrievance3(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#F1F8E9"/>
+<rect x="20" y="20" width="200" height="130" rx="8" fill="white" stroke="#7CB342" stroke-width="2"/>
+<text x="120" y="40" font-size="11" fill="#33691E" text-anchor="middle" font-weight="700">고충처리 연동지표</text>
+<line x1="30" y1="48" x2="210" y2="48" stroke="#DCEDC8" stroke-width="1"/>
+<rect x="30" y="55" width="180" height="26" rx="6" fill="#DCEDC8" stroke="#7CB342" stroke-width="1.5"/>
+<text x="120" y="66" font-size="10" fill="#33691E" text-anchor="middle" font-weight="700">① 고충처리 절차</text>
+<text x="120" y="77" font-size="8.5" fill="#558B2F" text-anchor="middle">신청→접수→조사→통보</text>
+<rect x="30" y="87" width="180" height="26" rx="6" fill="#DCEDC8" stroke="#7CB342" stroke-width="1.5"/>
+<text x="120" y="98" font-size="10" fill="#33691E" text-anchor="middle" font-weight="700">② 처리기한</text>
+<text x="120" y="109" font-size="8.5" fill="#558B2F" text-anchor="middle">접수일로부터 O일 이내</text>
+<rect x="30" y="119" width="180" height="26" rx="6" fill="#DCEDC8" stroke="#7CB342" stroke-width="1.5"/>
+<text x="120" y="130" font-size="10" fill="#33691E" text-anchor="middle" font-weight="700">③ 익명신고 방법</text>
+<text x="120" y="141" font-size="8.5" fill="#558B2F" text-anchor="middle">고충처리함 등 익명 가능</text>
+<rect x="235" y="20" width="225" height="130" rx="8" fill="white" stroke="#7CB342" stroke-width="1.5"/>
+<text x="347" y="38" font-size="11" fill="#33691E" text-anchor="middle" font-weight="700">3가지 모두 있어야 인정</text>
+<line x1="245" y1="46" x2="450" y2="46" stroke="#DCEDC8" stroke-width="1"/>
+<text x="250" y="65" font-size="10" fill="#555">하나라도 빠지면?</text>
+<rect x="250" y="72" width="200" height="22" rx="5" fill="#FFCCBC"/>
+<text x="350" y="87" font-size="11" fill="#C53030" text-anchor="middle" font-weight="700">연동지표 0점 처리</text>
+<text x="250" y="113" font-size="10" fill="#555">고충 없어도 기록?</text>
+<rect x="250" y="120" width="200" height="22" rx="5" fill="#C8E6C9"/>
+<text x="350" y="135" font-size="10" fill="#1B5E20" text-anchor="middle" font-weight="700">✅ 고충 없음도 기록 가능</text>
+</svg>`;}
+
+function svgMutualRespect(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF9C4"/>
+<circle cx="140" cy="70" r="22" fill="#FFCCAA"/>
+<path d="M119,63 Q123,50 140,47 Q157,50 161,63" fill="#5D4037"/>
+<ellipse cx="134" cy="67" rx="3" ry="3.5" fill="#333"/><ellipse cx="146" cy="67" rx="3" ry="3.5" fill="#333"/>
+<path d="M135,77 Q140,80 145,77" stroke="#A0826D" stroke-width="2" fill="none"/>
+<rect x="118" y="92" width="44" height="55" rx="9" fill="#EF5350"/>
+<text x="140" y="128" font-size="10" fill="white" text-anchor="middle" font-weight="700">수급자</text>
+<circle cx="345" cy="70" r="22" fill="#FFCCAA"/>
+<path d="M324,63 Q328,50 345,47 Q362,50 366,63" fill="#37474F"/>
+<ellipse cx="339" cy="67" rx="3" ry="3.5" fill="#333"/><ellipse cx="351" cy="67" rx="3" ry="3.5" fill="#333"/>
+<path d="M340,77 Q345,80 350,77" stroke="#A0826D" stroke-width="2" fill="none"/>
+<rect x="323" y="92" width="44" height="55" rx="9" fill="#5C6BC0"/>
+<text x="345" y="128" font-size="10" fill="white" text-anchor="middle" font-weight="700">요양보호사</text>
+<path d="M168,68 Q240,45 317,68" stroke="#F9A825" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M317,78 Q240,100 168,78" stroke="#F9A825" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<rect x="185" y="48" width="115" height="22" rx="8" fill="white" stroke="#F9A825" stroke-width="1.5"/>
+<text x="242" y="63" font-size="10" fill="#E65100" text-anchor="middle" font-weight="700">상호존중 안내</text>
+<rect x="35" y="145" width="415" height="14" rx="5" fill="#FFF59D" stroke="#F9A825" stroke-width="1"/>
+<text x="242" y="155" font-size="9" fill="#E65100" text-anchor="middle">연 1회 이상 실시 · 2026년 1월: 전 수급자 전수 안내</text>
+</svg>`;}
+
+function svgPrivacy4(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E8EAF6"/>
+<path d="M80,25 L150,25 L165,40 L165,105 Q122,140 80,105 Q37,140 37,105 L37,40 Z" fill="#3949AB"/>
+<path d="M80,35 L140,35 L155,48 L155,100 Q115,128 80,100 Q47,128 47,100 L47,48 Z" fill="#5C6BC0"/>
+<text x="101" y="72" font-size="22" fill="white" text-anchor="middle">🔒</text>
+<text x="101" y="92" font-size="9" fill="#C5CAE9" text-anchor="middle">개인정보</text>
+<text x="101" y="103" font-size="9" fill="#C5CAE9" text-anchor="middle">보호</text>
+<rect x="190" y="15" width="275" height="140" rx="8" fill="white" stroke="#3949AB" stroke-width="1.5"/>
+<text x="327" y="35" font-size="11" fill="#283593" text-anchor="middle" font-weight="700">동의서 4가지 필수 고지</text>
+<line x1="200" y1="43" x2="455" y2="43" stroke="#C5CAE9" stroke-width="1"/>
+<rect x="200" y="50" width="255" height="18" rx="4" fill="#E8EAF6"/>
+<text x="327" y="63" font-size="9.5" fill="#283593" text-anchor="middle">① 수집 항목</text>
+<rect x="200" y="72" width="255" height="18" rx="4" fill="#E8EAF6"/>
+<text x="327" y="85" font-size="9.5" fill="#283593" text-anchor="middle">② 수집 목적</text>
+<rect x="200" y="94" width="255" height="18" rx="4" fill="#E8EAF6"/>
+<text x="327" y="107" font-size="9.5" fill="#283593" text-anchor="middle">③ 보유·이용 기간</text>
+<rect x="200" y="116" width="255" height="18" rx="4" fill="#E8EAF6"/>
+<text x="327" y="129" font-size="9.5" fill="#283593" text-anchor="middle">④ 거부할 권리 (거부 시 제한사항)</text>
+<rect x="200" y="138" width="255" height="14" rx="3" fill="#FFCCBC"/>
+<text x="327" y="148" font-size="8.5" fill="#BF360C" text-anchor="middle">민감정보(건강정보 등) → 별도 동의 필수</text>
+</svg>`;}
+
+function svgContractChange(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF3E0"/>
+<rect x="25" y="20" width="155" height="130" rx="8" fill="white" stroke="#FF8F00" stroke-width="2"/>
+<rect x="25" y="20" width="155" height="20" rx="8" fill="#FF8F00"/><rect x="25" y="32" width="155" height="8" fill="#FF8F00"/>
+<text x="102" y="30" font-size="9" fill="white" text-anchor="middle" font-weight="700">기존 계약서</text>
+<line x1="35" y1="46" x2="172" y2="46" stroke="#FFE0B2" stroke-width="1"/>
+<text x="40" y="60" font-size="9" fill="#777">본인부담금: 15%</text>
+<text x="40" y="74" font-size="9" fill="#777">서비스: 주 3회</text>
+<text x="40" y="88" font-size="9" fill="#777">시간: 180분</text>
+<rect x="35" y="100" width="135" height="16" rx="3" fill="#FFF9C4"/>
+<text x="102" y="111" font-size="8.5" fill="#E65100" text-anchor="middle">↓ 본인부담금 변경</text>
+<rect x="35" y="122" width="135" height="18" rx="4" fill="#FFCCBC"/>
+<text x="102" y="134" font-size="9" fill="#C53030" text-anchor="middle">변경계약 체결 필수!</text>
+<text x="205" y="83" font-size="28" fill="#FF8F00" text-anchor="middle">≠</text>
+<rect x="230" y="20" width="230" height="130" rx="8" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="345" y="38" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">변경 처리 비교</text>
+<line x1="240" y1="46" x2="450" y2="46" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="240" y="53" width="200" height="28" rx="5" fill="#C8E6C9"/>
+<text x="340" y="64" font-size="9.5" fill="#1B5E20" text-anchor="middle" font-weight="700">수가 변경</text>
+<text x="340" y="76" font-size="9" fill="#388E3C" text-anchor="middle">→ 안내만 (계약 불필요)</text>
+<rect x="240" y="88" width="200" height="28" rx="5" fill="#FFCCBC"/>
+<text x="340" y="99" font-size="9.5" fill="#BF360C" text-anchor="middle" font-weight="700">본인부담금 변경</text>
+<text x="340" y="111" font-size="9" fill="#C53030" text-anchor="middle">→ 변경계약 필수!</text>
+<rect x="240" y="123" width="200" height="22" rx="5" fill="#FFF9C4"/>
+<text x="340" y="133" font-size="9" fill="#E65100" text-anchor="middle">💰 금액 변동 = 계약 변경</text>
+<text x="340" y="141" font-size="9" fill="#E65100" text-anchor="middle">수급자 동의 받아야 함</text>
+</svg>`;}
+
+function svgRuleText(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E8EAF6"/>
+<rect x="20" y="15" width="440" height="140" rx="10" fill="white" stroke="#3949AB" stroke-width="2"/>
+<rect x="20" y="15" width="440" height="22" rx="10" fill="#3949AB"/><rect x="20" y="29" width="440" height="8" fill="#3949AB"/>
+<text x="240" y="27" font-size="10" fill="white" text-anchor="middle" font-weight="700">운영규정 급여 문구 비교</text>
+<rect x="35" y="47" width="195" height="85" rx="8" fill="#FFCCBC" stroke="#E53935" stroke-width="1.5"/>
+<text x="132" y="65" font-size="10" fill="#BF360C" text-anchor="middle" font-weight="700">❌ 잘못된 문구</text>
+<text x="132" y="83" font-size="12" fill="#C53030" text-anchor="middle" font-weight="700">"지급하여야 한다"</text>
+<text x="132" y="100" font-size="9" fill="#BF360C" text-anchor="middle">→ 반드시 줘야 할 의무</text>
+<text x="132" y="115" font-size="9" fill="#BF360C" text-anchor="middle">→ 운영 어려울 때 위험</text>
+<rect x="250" y="47" width="195" height="85" rx="8" fill="#C8E6C9" stroke="#43A047" stroke-width="1.5"/>
+<text x="347" y="65" font-size="10" fill="#1B5E20" text-anchor="middle" font-weight="700">✅ 올바른 문구</text>
+<text x="347" y="83" font-size="12" fill="#2E7D32" text-anchor="middle" font-weight="700">"지급할 수 있다"</text>
+<text x="347" y="100" font-size="9" fill="#388E3C" text-anchor="middle">→ 재량의 여지 있음</text>
+<text x="347" y="115" font-size="9" fill="#388E3C" text-anchor="middle">→ 탄력적 운영 가능</text>
+<text x="220" y="90" font-size="18" fill="#3949AB" text-anchor="middle">VS</text>
+<rect x="35" y="138" width="410" height="12" rx="4" fill="#E8EAF6"/>
+<text x="240" y="147" font-size="8.5" fill="#3949AB" text-anchor="middle">금액, 수량 명시 NO → 규정 변경 부담 없애기</text>
+</svg>`;}
+
+function svgRecordDelivery(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E3F2FD"/>
+<rect x="25" y="25" width="200" height="120" rx="8" fill="white" stroke="#1E88E5" stroke-width="2"/>
+<text x="125" y="45" font-size="11" fill="#1565C0" text-anchor="middle" font-weight="700">급여제공기록지 교부</text>
+<line x1="35" y1="52" x2="215" y2="52" stroke="#BBDEFB" stroke-width="1"/>
+<rect x="35" y="59" width="180" height="20" rx="4" fill="#E3F2FD"/>
+<text x="125" y="73" font-size="9.5" fill="#1565C0" text-anchor="middle">교부일자: 2026.03.05</text>
+<rect x="35" y="84" width="180" height="20" rx="4" fill="#FFCCBC" stroke="#E53935" stroke-width="1"/>
+<text x="125" y="98" font-size="9.5" fill="#C53030" text-anchor="middle">수령자 서명: (없음) ✗</text>
+<rect x="35" y="110" width="180" height="16" rx="4" fill="#FFCCBC"/>
+<text x="125" y="121" font-size="9" fill="#C53030" text-anchor="middle">교부일자+서명 둘 다 필수!</text>
+<rect x="240" y="25" width="220" height="120" rx="8" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="350" y="45" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">교부 방법별 처리</text>
+<line x1="250" y1="52" x2="450" y2="52" stroke="#C8E6C9" stroke-width="1"/>
+<text x="255" y="69" font-size="9.5" fill="#1B5E20" font-weight="700">✅ 직접 교부</text>
+<text x="255" y="81" font-size="9" fill="#555">→ 교부일자 + 수령자 서명</text>
+<text x="255" y="97" font-size="9.5" fill="#1B5E20" font-weight="700">✅ 우편 발송</text>
+<text x="255" y="109" font-size="9" fill="#555">→ 우편물관리대장 작성</text>
+<text x="255" y="125" font-size="9.5" fill="#1B5E20" font-weight="700">✅ 앱 설치 수급자</text>
+<text x="255" y="137" font-size="9" fill="#555">→ 교부 의무 면제</text>
+</svg>`;}
+
+function svgSafety6(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF3E0"/>
+<polygon points="130,20 155,75 215,75 167,110 185,165 130,130 75,165 93,110 45,75 105,75" fill="#F9A825" stroke="#FF8F00" stroke-width="2"/>
+<text x="130" y="105" font-size="42" fill="white" text-anchor="middle" font-weight="800">6</text>
+<text x="130" y="120" font-size="10" fill="white" text-anchor="middle" font-weight="700">점</text>
+<rect x="240" y="20" width="225" height="130" rx="10" fill="white" stroke="#FF8F00" stroke-width="2"/>
+<text x="352" y="42" font-size="11" fill="#E65100" text-anchor="middle" font-weight="700">방문목욕 성폭력 예방</text>
+<line x1="250" y1="50" x2="455" y2="50" stroke="#FFE0B2" stroke-width="1"/>
+<rect x="250" y="57" width="205" height="22" rx="5" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+<text x="352" y="65" font-size="10" fill="#E65100" text-anchor="middle" font-weight="700">⭐ 6점 고배점 항목!</text>
+<text x="352" y="75" font-size="9" fill="#F57F17" text-anchor="middle">방문목욕 평가에서 가장 중요</text>
+<rect x="250" y="85" width="205" height="18" rx="4" fill="#E8F5E9"/>
+<text x="352" y="98" font-size="9.5" fill="#1B5E20" text-anchor="middle">성폭력 예방 교육 실시</text>
+<rect x="250" y="108" width="205" height="18" rx="4" fill="#E8F5E9"/>
+<text x="352" y="121" font-size="9.5" fill="#1B5E20" text-anchor="middle">예방 지침 비치</text>
+<rect x="250" y="131" width="205" height="14" rx="3" fill="#FFCCBC"/>
+<text x="352" y="141" font-size="8.5" fill="#C53030" text-anchor="middle">누락 시 6점 전부 감점</text>
+</svg>`;}
+
+function svgCheckup(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E8F5E9"/>
+<rect x="30" y="15" width="160" height="140" rx="8" fill="white" stroke="#43A047" stroke-width="2"/>
+<rect x="30" y="15" width="160" height="22" rx="8" fill="#43A047"/><rect x="30" y="29" width="160" height="8" fill="#43A047"/>
+<text x="110" y="27" font-size="9" fill="white" text-anchor="middle" font-weight="700">건강검진 확인 항목</text>
+<rect x="40" y="48" width="14" height="14" rx="3" fill="#43A047"/>
+<text x="62" y="60" font-size="10" fill="#333">발행일자 확인</text>
+<rect x="40" y="68" width="14" height="14" rx="3" fill="#43A047"/>
+<text x="62" y="80" font-size="10" fill="#333">항목 충족 여부</text>
+<rect x="40" y="88" width="14" height="14" rx="3" fill="#43A047"/>
+<text x="62" y="100" font-size="10" fill="#333">서비스 개시일 기준</text>
+<rect x="40" y="108" width="14" height="14" rx="3" fill="#E53935"/>
+<text x="62" y="120" font-size="10" fill="#C53030">채용일 ≠ 기준일!</text>
+<rect x="40" y="130" width="130" height="16" rx="4" fill="#C8E6C9"/>
+<text x="105" y="141" font-size="8.5" fill="#1B5E20" text-anchor="middle">서비스 개시일이 기준</text>
+<rect x="210" y="15" width="250" height="140" rx="8" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="335" y="35" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">체크리스트 관리</text>
+<line x1="220" y1="43" x2="450" y2="43" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="220" y="50" width="230" height="14" rx="3" fill="#E8F5E9"/>
+<text x="335" y="61" font-size="9" fill="#333" text-anchor="middle">직원명 | 개시일 | 제출일 | 항목충족</text>
+<rect x="220" y="68" width="230" height="12" rx="2" fill="#F5F5F5"/>
+<text x="335" y="78" font-size="8.5" fill="#555" text-anchor="middle">홍길동 | 2026.01.05 | 01.10 | ✓</text>
+<rect x="220" y="84" width="230" height="12" rx="2" fill="#F5F5F5"/>
+<text x="335" y="94" font-size="8.5" fill="#555" text-anchor="middle">김철수 | 2026.02.01 | 미제출 | ✗</text>
+<rect x="220" y="100" width="230" height="12" rx="2" fill="#FFCDD2"/>
+<text x="335" y="110" font-size="8.5" fill="#C53030" text-anchor="middle">이영희 | 2026.02.10 | 02.05 | 항목미달</text>
+<rect x="220" y="120" width="230" height="30" rx="6" fill="#FFF9C4"/>
+<text x="335" y="133" font-size="9.5" fill="#E65100" text-anchor="middle">말로만 걱정 NO</text>
+<text x="335" y="144" font-size="9" fill="#E65100" text-anchor="middle">→ 체크리스트로 관리!</text>
+</svg>`;}
+
+function svgMailbox(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#E3F2FD"/>
+<rect x="60" y="60" width="160" height="90" rx="6" fill="#1E88E5" stroke="#1565C0" stroke-width="2"/>
+<rect x="60" y="60" width="160" height="30" rx="6" fill="#1565C0"/>
+<rect x="60" y="80" width="160" height="10" fill="#1565C0"/>
+<ellipse cx="140" cy="90" rx="30" ry="10" fill="#42A5F5"/>
+<rect x="110" y="78" width="60" height="22" rx="3" fill="#BBDEFB"/>
+<line x1="90" y1="42" x2="100" y2="60" stroke="#1565C0" stroke-width="2.5"/>
+<circle cx="88" cy="40" r="5" fill="#F9A825"/>
+<rect x="55" y="148" width="170" height="8" rx="3" fill="#90CAF9"/>
+<rect x="140" y="55" width="6" height="12" rx="2" fill="#90CAF9"/>
+<rect x="270" y="20" width="195" height="135" rx="8" fill="white" stroke="#1E88E5" stroke-width="1.5"/>
+<text x="367" y="40" font-size="11" fill="#1565C0" text-anchor="middle" font-weight="700">우편 발송 처리</text>
+<line x1="280" y1="48" x2="455" y2="48" stroke="#BBDEFB" stroke-width="1"/>
+<rect x="280" y="55" width="175" height="22" rx="5" fill="#FFCCBC"/>
+<text x="367" y="65" font-size="9.5" fill="#C53030" text-anchor="middle">교부일자+서명만으로</text>
+<text x="367" y="74" font-size="9" fill="#C53030" text-anchor="middle">우편발송 증명 불충분</text>
+<rect x="280" y="83" width="175" height="22" rx="5" fill="#C8E6C9"/>
+<text x="367" y="93" font-size="9.5" fill="#1B5E20" text-anchor="middle" font-weight="700">우편물관리대장 필수</text>
+<text x="367" y="103" font-size="9" fill="#388E3C" text-anchor="middle">발송 증빙 완성</text>
+<rect x="280" y="111" width="175" height="38" rx="5" fill="#E3F2FD"/>
+<text x="367" y="123" font-size="9" fill="#1565C0" text-anchor="middle">대장 기재 내용:</text>
+<text x="367" y="136" font-size="9" fill="#333" text-anchor="middle">수급자명·발송일·내용물</text>
+<text x="367" y="147" font-size="9" fill="#333" text-anchor="middle">수령 확인방법</text>
+</svg>`;}
+
+function svgFamilyCare(){return`<svg viewBox="0 0 480 165" xmlns="http://www.w3.org/2000/svg">
+<rect width="480" height="165" fill="#FFF8E1"/>
+<circle cx="85" cy="55" r="18" fill="#FFCCAA"/>
+<path d="M68,49 Q72,37 85,35 Q98,37 102,49" fill="#5D4037"/>
+<ellipse cx="80" cy="53" rx="2.5" ry="3" fill="#333"/><ellipse cx="90" cy="53" rx="2.5" ry="3" fill="#333"/>
+<path d="M81,62 Q85,65 89,62" stroke="#A0826D" stroke-width="1.5" fill="none"/>
+<rect x="68" y="73" width="34" height="45" rx="8" fill="#EF5350"/>
+<text x="85" y="100" font-size="8" fill="white" text-anchor="middle" font-weight="700">어르신</text>
+<circle cx="165" cy="55" r="18" fill="#FFCCAA"/>
+<path d="M148,49 Q152,37 165,35 Q178,37 182,49" fill="#37474F"/>
+<ellipse cx="160" cy="53" rx="2.5" ry="3" fill="#333"/><ellipse cx="170" cy="53" rx="2.5" ry="3" fill="#333"/>
+<rect x="148" y="73" width="34" height="45" rx="8" fill="#5C6BC0"/>
+<text x="165" y="100" font-size="8" fill="white" text-anchor="middle" font-weight="700">가족</text>
+<path d="M102,83 L148,83" stroke="#F9A825" stroke-width="3"/>
+<text x="125" y="75" font-size="9" fill="#E65100" text-anchor="middle" font-weight="700">가족요양</text>
+<rect x="220" y="20" width="240" height="130" rx="8" fill="white" stroke="#43A047" stroke-width="1.5"/>
+<text x="340" y="40" font-size="11" fill="#2E7D32" text-anchor="middle" font-weight="700">가족요양 교부 규정</text>
+<line x1="230" y1="48" x2="450" y2="48" stroke="#C8E6C9" stroke-width="1"/>
+<rect x="230" y="55" width="220" height="30" rx="5" fill="#E8F5E9"/>
+<text x="340" y="68" font-size="10" fill="#1B5E20" text-anchor="middle" font-weight="700">✅ 가족요양 수급자</text>
+<text x="340" y="80" font-size="9" fill="#388E3C" text-anchor="middle">기록지 교부 의무 없음</text>
+<rect x="230" y="92" width="220" height="30" rx="5" fill="#E8F5E9"/>
+<text x="340" y="105" font-size="10" fill="#1B5E20" text-anchor="middle" font-weight="700">✅ 앱 설치 수급자</text>
+<text x="340" y="117" font-size="9" fill="#388E3C" text-anchor="middle">앱으로 확인 → 교부 면제</text>
+<rect x="230" y="128" width="220" height="18" rx="4" fill="#FFCCBC"/>
+<text x="340" y="140" font-size="9" fill="#C53030" text-anchor="middle">일반 수급자 → 교부 의무 있음</text>
+</svg>`;}
+
+const SC={bath:svgBath,desk:svgDesk,visit:svgVisit,record:svgRecord,ill:svgIll,ctrt:svgCtrt,cal:svgCal,mtg:svgMtg,fam:svgFam,svgDoc:svgDoc,svgGoal:svgGoal,svgEval2:svgEval2,svgCase2:svgCase2,svgTraining:svgTraining,svgStaff:svgStaff,svgBoard:svgBoard,svgBath2:svgBath2,svgTimePlan:svgTimePlan,svgCogExclude:svgCogExclude,svgRetro:svgRetro,svgOpinion:svgOpinion,svgNutrition:svgNutrition,svgZeroMin:svgZeroMin,svgFood:svgFood,svgStructure3:svgStructure3,svgHoliday:svgHoliday,svgFeeNotice:svgFeeNotice,svgCaseReason:svgCaseReason,svgFallTrain:svgFallTrain,svgMedical:svgMedical,svgLeave:svgLeave,svgCaseDebate:svgCaseDebate,svgIndirect:svgIndirect,svgEdu7:svgEdu7,svgGrievance3:svgGrievance3,svgMutualRespect:svgMutualRespect,svgPrivacy4:svgPrivacy4,svgContractChange:svgContractChange,svgRuleText:svgRuleText,svgRecordDelivery:svgRecordDelivery,svgSafety6:svgSafety6,svgCheckup:svgCheckup,svgMailbox:svgMailbox,svgFamilyCare:svgFamilyCare};
 
 function lbl(t){return '<span style="font-size:11px;background:#E0E7FF;color:#4338CA;padding:2px 8px;border-radius:8px;font-weight:700;display:inline-block;margin-bottom:5px">📋 '+t+'</span><br>';}
 function mkOk(key,sub,quote,ex){
@@ -326,101 +1196,101 @@ const D2=[
 const D3=[
 {sc:'svgDoc',sit:'결과평가 후 새 계획서를 작성하면서 이전과 서비스 내용이 같아 <strong>"계속"</strong>으로 표시했습니다.',q:'"계속" 처리가 가능하려면 어떤 조건이 필요할까요?',opts:['서비스 목표만 동일하면 "계속"이 가능하다','이전·이후 계획서 내용이 완전히 동일해야 한다','수급자가 변화 없다고 확인해주면 "계속"이 가능하다'],ans:1,ok:mkOk('<strong>계획서 계속 처리</strong> → 이전·이후 계획서 내용이 <strong>완전히 동일</strong>해야 합니다.','','\"계속이면 이전 계획서와 다음 계획서 내용이 똑같아야 돼요. 다르잖아요? 그러면 이건 계속이 아니라 변경이 돼야 되는 거죠.\"',null)},
 {sc:'svgDoc',sit:'이전 계획서에는 <strong>"양치질 돕기"</strong>였는데, 이번에는 <strong>"구강 위생 관리"</strong>로 표현을 바꾸고 "계속"으로 처리했습니다.',q:'이 처리가 맞을까요?',opts:['맞다. 의미가 같으면 표현이 달라도 "계속"이 된다','틀리다. 문구가 달라지면 "변경"으로 처리해야 한다','표현 차이는 담당자 재량으로 판단하면 된다'],ans:1,ok:mkOk('<strong>문구 변경 → "변경" 처리</strong>가 원칙입니다. 사소한 표현 차이도 해당됩니다.','','\"계속이면 이전 계획서와 다음 계획서 내용이 똑같아야 돼요.\"',null)},
-{sc:'svgDoc',sit:'내용은 같은데 <strong>신체활동 시간만 90분에서 60분</strong>으로 줄였습니다. "계속"으로 처리했습니다.',q:'이 처리가 맞을까요?',opts:['맞다. 서비스 항목이 같으면 "계속"이 된다','틀리다. 시간이 달라지면 "변경"으로 처리해야 한다','시간 변경은 단순 조정이므로 "계속"도 가능하다'],ans:1,ok:mkOk('<strong>시간 변경 → "변경" 처리</strong> 원칙입니다. 항목·시간·문구 중 하나라도 달라지면 변경입니다.','','\"계속이면 이전 계획서와 다음 계획서 내용이 똑같아야 돼요. 다르잖아요?\"',null)},
+{sc:'svgTimePlan',sit:'내용은 같은데 <strong>신체활동 시간만 90분에서 60분</strong>으로 줄였습니다. "계속"으로 처리했습니다.',q:'이 처리가 맞을까요?',opts:['맞다. 서비스 항목이 같으면 "계속"이 된다','틀리다. 시간이 달라지면 "변경"으로 처리해야 한다','시간 변경은 단순 조정이므로 "계속"도 가능하다'],ans:1,ok:mkOk('<strong>시간 변경 → "변경" 처리</strong> 원칙입니다. 항목·시간·문구 중 하나라도 달라지면 변경입니다.','','\"계속이면 이전 계획서와 다음 계획서 내용이 똑같아야 돼요. 다르잖아요?\"',null)},
 {sc:'svgDoc',sit:'어르신 옷 갈아입는 과정을 <strong>"상의 벗기 → 하의 벗기 → 상의 입히기 → 하의 입히기"</strong> 4개 항목으로 세분화했습니다.',q:'이 방식, 맞을까요?',opts:['맞다. 세분화할수록 서비스 내용이 구체적이고 좋다','틀리다. 연속동작은 "옷 갈아입히기" 하나로 묶어야 한다','어르신 상태가 심각하면 세분화해도 된다'],ans:1,ok:mkOk('<strong>연속동작 → 하나로 묶기</strong> 원칙입니다. 세분화는 금지입니다.','','연속되는 동작은 하나의 서비스 항목으로 묶어 기재해야 합니다. 세분화하면 항목이 과도하게 늘어납니다.','✍️ 올바른 예: "옷 갈아입히기" (O) / "상의 벗기 + 하의 벗기 + 상의 입히기 + 하의 입히기" (X)')},
 {sc:'svgDoc',sit:'계획서에 <strong>"손발톱 깎기"</strong> 항목이 있는데, 실제로는 가족이 해주고 있어 한 번도 수행한 적이 없습니다.',q:'이 항목을 계획서에 유지해야 할까요?',opts:['유지해야 한다. 혹시 필요할 때를 대비해 넣어두는 게 낫다','제외해야 한다. 실제 수행하지 않는 항목은 계획서에서 빼야 한다','항목은 유지하되 주 0회, 시간 0분으로 기재하면 된다'],ans:1,ok:mkOk('<strong>실제 미수행 항목 → 계획서에서 제외</strong>해야 합니다.','','실제 수행하지 않는 항목을 계획서에 넣어두면 기록과 실제 서비스 간 불일치가 발생합니다.',null)},
-{sc:'svgGoal',sit:'급여제공계획서에 <strong>인지활동지원과 인지관리지원 항목</strong>을 포함시켰습니다.',q:'이 두 항목에 대한 지침은 무엇일까요?',opts:['반드시 포함해야 한다. 인지 기능 유지는 필수 서비스다','제외를 권장한다. 포함 시 종합의견에 사유를 기재해야 한다','치매 등급 수급자에게만 포함이 허용된다'],ans:1,ok:mkOk('<strong>인지활동지원·인지관리지원 → 제외 권장</strong>. 포함 시 종합의견에 <strong>사유 기재 필수</strong>.','','두 항목 모두 제외를 권장합니다. 포함하려면 종합의견에 그 이유를 명시해야 합니다.',null)},
-{sc:'svgGoal',sit:'지난달 계획서에서 <strong>오류를 발견</strong>했습니다. 직접 수정하려 합니다.',q:'어떻게 처리해야 할까요?',opts:['직접 수정해도 된다. 오류는 즉시 수정이 원칙이다','자체 서식을 활용해서 별도로 관리한다','지나간 기록은 수정 자체가 금지되어 있다'],ans:1,ok:mkOk('<strong>지나간 기록 오류 → 자체 서식 활용</strong>으로 별도 관리합니다.','','지나간 기록을 직접 수정하면 기록 조작으로 볼 수 있습니다. 자체 서식을 만들어 별도 관리하는 것이 원칙입니다.',null)},
+{sc:'svgCogExclude',sit:'급여제공계획서에 <strong>인지활동지원과 인지관리지원 항목</strong>을 포함시켰습니다.',q:'이 두 항목에 대한 지침은 무엇일까요?',opts:['반드시 포함해야 한다. 인지 기능 유지는 필수 서비스다','제외를 권장한다. 포함 시 종합의견에 사유를 기재해야 한다','치매 등급 수급자에게만 포함이 허용된다'],ans:1,ok:mkOk('<strong>인지활동지원·인지관리지원 → 제외 권장</strong>. 포함 시 종합의견에 <strong>사유 기재 필수</strong>.','','두 항목 모두 제외를 권장합니다. 포함하려면 종합의견에 그 이유를 명시해야 합니다.',null)},
+{sc:'svgRetro',sit:'지난달 계획서에서 <strong>오류를 발견</strong>했습니다. 직접 수정하려 합니다.',q:'어떻게 처리해야 할까요?',opts:['직접 수정해도 된다. 오류는 즉시 수정이 원칙이다','자체 서식을 활용해서 별도로 관리한다','지나간 기록은 수정 자체가 금지되어 있다'],ans:1,ok:mkOk('<strong>지나간 기록 오류 → 자체 서식 활용</strong>으로 별도 관리합니다.','','지나간 기록을 직접 수정하면 기록 조작으로 볼 수 있습니다. 자체 서식을 만들어 별도 관리하는 것이 원칙입니다.',null)},
 {sc:'svgGoal',sit:'급여제공계획을 변경하면서 <strong>센터 자체 변경사유서 양식</strong>을 만들어 첨부했습니다.',q:'이것이 도움이 될까요?',opts:['도움이 된다. 근거 서류가 충분할수록 평가에서 유리하다','오히려 트집을 잡힐 소지가 된다. 내부 양식은 불필요하다','공단 지정 양식이 아니면 인정되지 않는다'],ans:1,ok:mkOk('<strong>변경사유서 내부양식 → 불필요</strong>. 오히려 트집 잡힐 소지가 됩니다.','','자체적으로 만든 변경사유서는 평가자가 꼼꼼히 검토하는 빌미를 제공할 수 있습니다.',null)},
 {sc:'svgDoc',sit:'2026년부터 급여제공계획을 변경하면 추가로 해야 할 의무가 생겼습니다.',q:'변경 후 무엇을 해야 할까요?',opts:['수급자에게만 통보하면 된다','공단에 변경 사실을 반드시 통보해야 한다','통보는 의무가 아닌 권장사항이다'],ans:1,ok:mkOk('<strong>급여제공계획 변경 → 공단 통보 필수</strong> (2026년부터)','',' 2026년부터 급여제공계획 변경 시 공단에 통보하는 것이 의무화됐습니다.',null)},
-{sc:'svgDoc',sit:'계획서에는 없는 항목인데 요양보호사가 <strong>기록지에 임의로 체크</strong>했습니다.',q:'이 처리가 맞을까요?',opts:['맞다. 실제로 수행했으면 기록지에 체크해도 된다','틀리다. 계획서에 없는 항목은 기록지에 써서는 안 된다','서비스를 제공했으면 나중에 계획서를 소급 수정하면 된다'],ans:1,ok:mkOk('<strong>계획서-기록지 연동 원칙</strong>: 계획서에 쓴 항목만 기록지에 체크. <strong>계획서에 없는 항목은 기록지에 쓰면 안 됩니다.</strong>','계획서에 없는 서비스를 제공했다면 먼저 계획서를 변경한 후 기록해야 합니다.','"요양보호서를 작성하면 급여제공기록지에 체크가 되어야 돼요. 제외하면 안써야 되는거지."',null)}
+{sc:'record',sit:'계획서에는 없는 항목인데 요양보호사가 <strong>기록지에 임의로 체크</strong>했습니다.',q:'이 처리가 맞을까요?',opts:['맞다. 실제로 수행했으면 기록지에 체크해도 된다','틀리다. 계획서에 없는 항목은 기록지에 써서는 안 된다','서비스를 제공했으면 나중에 계획서를 소급 수정하면 된다'],ans:1,ok:mkOk('<strong>계획서-기록지 연동 원칙</strong>: 계획서에 쓴 항목만 기록지에 체크. <strong>계획서에 없는 항목은 기록지에 쓰면 안 됩니다.</strong>','계획서에 없는 서비스를 제공했다면 먼저 계획서를 변경한 후 기록해야 합니다.','"요양보호서를 작성하면 급여제공기록지에 체크가 되어야 돼요. 제외하면 안써야 되는거지."',null)}
 ];
 
 const D4=[
-{sc:'svgGoal',sit:'종합의견을 작성하면서 <strong>어르신의 각 항목별 세부 점수들을 나열</strong>하는 방식으로 작성했습니다.',q:'종합의견 작성 방법으로 맞을까요?',opts:['맞다. 세부 점수가 있어야 근거가 명확해진다','틀리다. 종합의견은 러프하게, 세부 점수는 넣지 않는다','점수 나열 방식이 평가자에게 더 신뢰감을 준다'],ans:1,ok:mkOk('<strong>종합의견 → 러프하게</strong> 작성, <strong>세부 점수 넣지 말 것</strong>','','\"러프하게, 세부점수 넣지 말 거예요.\"',null)},
-{sc:'svgGoal',sit:'어르신이 임플란트 시술을 받아 음식 섭취에 제한이 있습니다. 이 내용을 <strong>"구강기능" 항목</strong>에 기재했습니다.',q:'올바른 기재 위치일까요?',opts:['맞다. 구강과 관련된 내용이므로 구강기능 항목이 맞다','틀리다. 치아·임플란트 내용은 영양상태 항목에 기재해야 한다','구강기능이나 영양상태 항목 어디에나 기재 가능하다'],ans:1,ok:mkOk('<strong>치아·임플란트 내용 → 영양상태 항목에 기재</strong>합니다.','','\"치아나 임플란트 내용은 영양상태 항목에 넣어주세요.\"',null)},
+{sc:'svgOpinion',sit:'종합의견을 작성하면서 <strong>어르신의 각 항목별 세부 점수들을 나열</strong>하는 방식으로 작성했습니다.',q:'종합의견 작성 방법으로 맞을까요?',opts:['맞다. 세부 점수가 있어야 근거가 명확해진다','틀리다. 종합의견은 러프하게, 세부 점수는 넣지 않는다','점수 나열 방식이 평가자에게 더 신뢰감을 준다'],ans:1,ok:mkOk('<strong>종합의견 → 러프하게</strong> 작성, <strong>세부 점수 넣지 말 것</strong>','','\"러프하게, 세부점수 넣지 말 거예요.\"',null)},
+{sc:'svgNutrition',sit:'어르신이 임플란트 시술을 받아 음식 섭취에 제한이 있습니다. 이 내용을 <strong>"구강기능" 항목</strong>에 기재했습니다.',q:'올바른 기재 위치일까요?',opts:['맞다. 구강과 관련된 내용이므로 구강기능 항목이 맞다','틀리다. 치아·임플란트 내용은 영양상태 항목에 기재해야 한다','구강기능이나 영양상태 항목 어디에나 기재 가능하다'],ans:1,ok:mkOk('<strong>치아·임플란트 내용 → 영양상태 항목에 기재</strong>합니다.','','\"치아나 임플란트 내용은 영양상태 항목에 넣어주세요.\"',null)},
 {sc:'svgGoal',sit:'급여제공계획서의 목표를 <strong>"균형 잡힌 식사 제공 및 영양 상태 모니터링"</strong>이라고 작성했습니다.',q:'이 목표 작성 방식이 맞을까요?',opts:['맞다. 서비스 방향이 명확하게 드러난다','틀리다. 목표는 반드시 "~할 수 있다" 형태로 작성해야 한다','목표 형태는 센터 자율로 정할 수 있다'],ans:1,ok:mkOk('<strong>목표 → "~할 수 있다" 형태</strong>로 작성해야 합니다.','','목표는 수급자 주체로, 달성 가능한 상태를 표현하는 방식으로 작성해야 합니다.',lbl('올바른 예') + '"균형 잡힌 식사를 <b style=\\"color:#C53030\\">스스로 할 수 있다</b>"<br>"보행기로 실내 이동을 <b style=\\"color:#C53030\\">할 수 있다</b>"')},
-{sc:'svgGoal',sit:'신체 90분, 정서 30분, 가사 60분으로 <strong>관행적으로 굳어진 시간 배분</strong>을 적용했습니다.',q:'이 시간 배분이 문제가 될까요?',opts:['문제가 된다. 어르신 상황에 맞게 개별적으로 배분해야 한다','문제없다. 관행적으로 쓰는 배분 방식은 문제 삼지 않는다','문제가 된다. 정서 시간이 너무 적다'],ans:1,ok:mkOk('<strong>관행적 시간 배분(90/30/60) → 문제 삼지 않습니다.</strong>','','\"서비스 시간 배분 관행 문제 안 삼음\" — 단, 정서 60분 미만, 가사 90분 이내 기준은 있습니다.',null)},
-{sc:'svgGoal',sit:'특정 서비스를 "필요시 제공"하는 개념으로 <strong>0분으로 입력</strong>했습니다.',q:'0분 입력이 가능할까요?',opts:['가능하다. 필요시 제공 개념으로 0분도 유효하다','불가하다. 최소 5분은 입력해야 한다','0분은 가능하나 사유를 종합의견에 기재해야 한다'],ans:1,ok:mkOk('<strong>0분 입력 불가</strong>. 최소 <strong>5분</strong>은 입력해야 합니다.','','\"급여제분계획서에 필요시 0분 입력이 안돼요. 단 5분이라도 입력을 해놔야 되는 걸 바꿔놨어요.\"',null)},
-{sc:'svgGoal',sit:'급여제공계획서에서 <strong>인지활동지원과 인지관리지원 항목을 제외</strong>했습니다.',q:'추가로 해야 할 것이 있을까요?',opts:['없다. 제외 자체로 충분하다','종합의견에 인지활동 제외 사유를 기재해야 한다','수급자 보호자에게 제외 사실을 통보해야 한다'],ans:1,ok:mkOk('<strong>인지활동지원·인지관리지원 제외 → 종합의견에 사유 기재</strong> 필수','','"인지활동지원과 인지관리지원은 빼고 그 사유를 종합후견에 써줘라."',null)},
-{sc:'svgGoal',sit:'종합의견을 <strong>욕구사정 총평과 비슷한 분량</strong>으로 작성했습니다.',q:'적절한 분량일까요?',opts:['충분하다. 욕구사정과 같은 분량이면 충실한 것이다','많다. 종합의견은 욕구사정 총평의 절반 분량이 적당하다','부족하다. 종합의견은 욕구사정보다 더 자세해야 한다'],ans:1,ok:mkOk('<strong>종합의견 분량 → 욕구사정 총평의 절반</strong>이 적당합니다.','','종합의견이 욕구사정보다 길면 중복이 됩니다. 핵심만 간결하게 담는 것이 원칙입니다.',null)},
-{sc:'svgGoal',sit:'종합의견을 작성하면서 <strong>욕구 항목별 세부 내용을 상세히 기술</strong>했습니다.',q:'올바른 작성 방식일까요?',opts:['맞다. 세부 내용이 상세할수록 평가에 유리하다','틀리다. 판단근거 중심으로 작성하고 욕구사정 세부내용은 줄여야 한다','욕구사정 내용을 그대로 옮겨 쓰면 충실한 것이다'],ans:1,ok:mkOk('<strong>종합의견 → 판단근거 중심</strong>으로 작성, 욕구사정 세부내용은 줄여야 합니다.','','종합의견에서 욕구사정 내용을 반복하면 평가자 입장에서 오히려 혼란을 줄 수 있습니다.',null)},
-{sc:'svgGoal',sit:'2026년에 새로 추가된 종합의견 기재 항목이 있습니다.',q:'새로 추가된 항목은 무엇일까요?',opts:['낙상 예방 생활습관 체크리스트','기피식품 항목','정신건강 상태 자가진단'],ans:1,ok:mkOk('<strong>2026년 → 기피식품 항목 추가</strong>됩니다.','','2026년부터 종합의견 작성 시 어르신의 기피식품 항목을 추가로 기재해야 합니다.',null)},
-{sc:'svgGoal',sit:'종합의견의 <strong>3단 구조</strong>를 점검하고 있습니다.',q:'올바른 3단 구조 순서는 무엇일까요?',opts:['주요 기능상태·환경 → 유의사항 → 서비스 제공방향','주요 기능상태·환경 → 서비스 제공방향 → 유의사항','서비스 제공방향 → 주요 기능상태·환경 → 유의사항'],ans:1,ok:mkOk('<strong>3단 구조: 기능상태·환경 → 서비스 제공방향 → 유의사항</strong>','','종합의견은 이 3단 구조로 작성해야 합니다. 순서를 지키는 것이 중요합니다.',null)},
-{sc:'svgGoal',sit:'급여제공계획서에 <strong>정서지원 70분, 가사지원 100분</strong>으로 시간을 배분했습니다.',q:'이 시간 배분에 문제가 있을까요?',opts:['문제없다. 어르신 상황에 맞게 배분하면 된다','문제 있다. 정서지원은 60분 미만, 가사지원은 90분 이내가 기준이다','시간 배분 기준은 없다. 센터 자율이다'],ans:1,ok:mkOk('<strong>정서지원 → 60분 미만</strong>, <strong>가사지원 → 90분 이내</strong>가 기준입니다.','이 기준을 벗어나면 적정성 평가에서 지적받을 수 있습니다.','"정서지원은 60분 미만, 가사지원은 90분 이내"',null)}
+{sc:'svgTimePlan',sit:'신체 90분, 정서 30분, 가사 60분으로 <strong>관행적으로 굳어진 시간 배분</strong>을 적용했습니다.',q:'이 시간 배분이 문제가 될까요?',opts:['문제가 된다. 어르신 상황에 맞게 개별적으로 배분해야 한다','문제없다. 관행적으로 쓰는 배분 방식은 문제 삼지 않는다','문제가 된다. 정서 시간이 너무 적다'],ans:1,ok:mkOk('<strong>관행적 시간 배분(90/30/60) → 문제 삼지 않습니다.</strong>','','\"서비스 시간 배분 관행 문제 안 삼음\" — 단, 정서 60분 미만, 가사 90분 이내 기준은 있습니다.',null)},
+{sc:'svgZeroMin',sit:'특정 서비스를 "필요시 제공"하는 개념으로 <strong>0분으로 입력</strong>했습니다.',q:'0분 입력이 가능할까요?',opts:['가능하다. 필요시 제공 개념으로 0분도 유효하다','불가하다. 최소 5분은 입력해야 한다','0분은 가능하나 사유를 종합의견에 기재해야 한다'],ans:1,ok:mkOk('<strong>0분 입력 불가</strong>. 최소 <strong>5분</strong>은 입력해야 합니다.','','\"급여제분계획서에 필요시 0분 입력이 안돼요. 단 5분이라도 입력을 해놔야 되는 걸 바꿔놨어요.\"',null)},
+{sc:'svgCogExclude',sit:'급여제공계획서에서 <strong>인지활동지원과 인지관리지원 항목을 제외</strong>했습니다.',q:'추가로 해야 할 것이 있을까요?',opts:['없다. 제외 자체로 충분하다','종합의견에 인지활동 제외 사유를 기재해야 한다','수급자 보호자에게 제외 사실을 통보해야 한다'],ans:1,ok:mkOk('<strong>인지활동지원·인지관리지원 제외 → 종합의견에 사유 기재</strong> 필수','','"인지활동지원과 인지관리지원은 빼고 그 사유를 종합후견에 써줘라."',null)},
+{sc:'svgOpinion',sit:'종합의견을 <strong>욕구사정 총평과 비슷한 분량</strong>으로 작성했습니다.',q:'적절한 분량일까요?',opts:['충분하다. 욕구사정과 같은 분량이면 충실한 것이다','많다. 종합의견은 욕구사정 총평의 절반 분량이 적당하다','부족하다. 종합의견은 욕구사정보다 더 자세해야 한다'],ans:1,ok:mkOk('<strong>종합의견 분량 → 욕구사정 총평의 절반</strong>이 적당합니다.','','종합의견이 욕구사정보다 길면 중복이 됩니다. 핵심만 간결하게 담는 것이 원칙입니다.',null)},
+{sc:'svgOpinion',sit:'종합의견을 작성하면서 <strong>욕구 항목별 세부 내용을 상세히 기술</strong>했습니다.',q:'올바른 작성 방식일까요?',opts:['맞다. 세부 내용이 상세할수록 평가에 유리하다','틀리다. 판단근거 중심으로 작성하고 욕구사정 세부내용은 줄여야 한다','욕구사정 내용을 그대로 옮겨 쓰면 충실한 것이다'],ans:1,ok:mkOk('<strong>종합의견 → 판단근거 중심</strong>으로 작성, 욕구사정 세부내용은 줄여야 합니다.','','종합의견에서 욕구사정 내용을 반복하면 평가자 입장에서 오히려 혼란을 줄 수 있습니다.',null)},
+{sc:'svgFood',sit:'2026년에 새로 추가된 종합의견 기재 항목이 있습니다.',q:'새로 추가된 항목은 무엇일까요?',opts:['낙상 예방 생활습관 체크리스트','기피식품 항목','정신건강 상태 자가진단'],ans:1,ok:mkOk('<strong>2026년 → 기피식품 항목 추가</strong>됩니다.','','2026년부터 종합의견 작성 시 어르신의 기피식품 항목을 추가로 기재해야 합니다.',null)},
+{sc:'svgStructure3',sit:'종합의견의 <strong>3단 구조</strong>를 점검하고 있습니다.',q:'올바른 3단 구조 순서는 무엇일까요?',opts:['주요 기능상태·환경 → 유의사항 → 서비스 제공방향','주요 기능상태·환경 → 서비스 제공방향 → 유의사항','서비스 제공방향 → 주요 기능상태·환경 → 유의사항'],ans:1,ok:mkOk('<strong>3단 구조: 기능상태·환경 → 서비스 제공방향 → 유의사항</strong>','','종합의견은 이 3단 구조로 작성해야 합니다. 순서를 지키는 것이 중요합니다.',null)},
+{sc:'svgTimePlan',sit:'급여제공계획서에 <strong>정서지원 70분, 가사지원 100분</strong>으로 시간을 배분했습니다.',q:'이 시간 배분에 문제가 있을까요?',opts:['문제없다. 어르신 상황에 맞게 배분하면 된다','문제 있다. 정서지원은 60분 미만, 가사지원은 90분 이내가 기준이다','시간 배분 기준은 없다. 센터 자율이다'],ans:1,ok:mkOk('<strong>정서지원 → 60분 미만</strong>, <strong>가사지원 → 90분 이내</strong>가 기준입니다.','이 기준을 벗어나면 적정성 평가에서 지적받을 수 있습니다.','"정서지원은 60분 미만, 가사지원은 90분 이내"',null)}
 ];
 
 const D5=[
 {sc:'svgEval2',sit:'결과평가서를 작성하면서 수급자 상태 변화, 목표 달성 여부, 담당자 의견을 기재했습니다.',q:'결과평가서에 반드시 들어가야 할 필수 항목 3가지는 무엇일까요?',opts:['평가일자, 수급자 상태, 목표 달성 여부','평가일자, 평가자, 종합의견','평가자, 수급자 서명, 보호자 확인'],ans:1,ok:mkOk('<strong>결과평가 필수 3가지 → 평가일자, 평가자, 종합의견</strong>','','결과평가서에는 이 3가지가 반드시 포함되어야 합니다. 빠지면 인정되지 않습니다.',null)},
 {sc:'svgEval2',sit:'결과평가에서 계획을 <strong>"유지"</strong>로 결정했습니다. 이유는 <strong>"특이사항 없음"</strong>이라고 간단히 기재했습니다.',q:'이 기재 방식이 충분할까요?',opts:['충분하다. 특이사항이 없으면 간단히 써도 된다','부족하다. 유지 시에도 구체적인 사유를 기술해야 한다','계획 유지 시에는 이유 기재가 필수가 아니다'],ans:1,ok:mkOk('<strong>계획 유지 시 → 구체적 사유 기술 필수</strong>','','\"9개 세부목표 평가 결과 상태변화 관찰되지 않음, 목표 달성률 높아 계획 유지\" 등으로 구체적으로 써야 합니다.',lbl('올바른 예') + '"9개 세부목표 평가 결과 <b style=\\"color:#C53030\\">상태변화 관찰되지 않아</b> <b style=\\"color:#C53030\\">계획 유지</b>"')},
 {sc:'svgEval2',sit:'결과평가 후 계획을 변경했습니다. <strong>변경 사실만 기재</strong>하고 이전과의 차이점은 기재하지 않았습니다.',q:'이 기재 방식이 맞을까요?',opts:['맞다. 변경 사실만 기재하면 된다','틀리다. 변경 시에는 이전과의 차이점도 함께 기술해야 한다','변경 후 새 계획서가 있으면 차이점 기재는 불필요하다'],ans:1,ok:mkOk('<strong>계획 변경 시 → 이전과의 차이점 기술 필수</strong>','','무엇이 어떻게 바뀌었는지 명시해야 평가에서 근거가 됩니다.',null)},
-{sc:'svgEval2',sit:'이전 달 결과평가서를 <strong>소급해서 작성</strong>해야 하는 상황이 생겼습니다.',q:'어떻게 해야 할까요?',opts:['해당 날짜로 소급 작성해도 된다','자체 서식을 활용해서 관리한다','소급 작성은 원칙적으로 불가능하다'],ans:1,ok:mkOk('<strong>지나간 기록 → 자체 서식 활용</strong>으로 별도 관리합니다.','','지나간 기록을 직접 소급 작성하면 기록 조작으로 볼 수 있습니다.',null)},
-{sc:'svgEval2',sit:'어르신 상태 악화로 서비스 시간을 <strong>월 120분에서 180분으로 늘리기로</strong> 했습니다.',q:'어떤 절차가 필요할까요?',opts:['급여제공계획만 변경하면 된다','변경계약과 급여제공계획 변경 모두 필요하다','서비스 시간 변경은 담당자 판단으로 즉시 적용이 가능하다'],ans:1,ok:mkOk('<strong>서비스 시간 변경 → 변경계약 + 급여제공계획 변경</strong> 모두 필요합니다.','','서비스 횟수·시간 변경은 계약 조건 변경이므로 반드시 변경계약을 먼저 체결해야 합니다.',null)},
-{sc:'svgEval2',sit:'이번달만 사정상 <strong>서비스 시간을 30분 추가</strong>로 제공했습니다. 지속 여부는 미정입니다.',q:'어떻게 처리해야 할까요?',opts:['변경계약을 체결해야 한다','급여제공계획을 먼저 변경해야 한다','급여제공기록지 특이사항란에 기재하면 된다'],ans:2,ok:mkOk('<strong>일시적 시간 증가 → 특이사항란에 기재</strong>, 변경계약·계획 변경 불필요합니다.','','이 상태가 지속된다면 그때 변경계약과 계획 변경을 검토합니다.',lbl('특이사항란') + '"이번달 건강 저하로 서비스 시간 30분 추가 제공<b style=\\"color:#C53030\\">(일시적)</b>, <b style=\\"color:#C53030\\">경과에 따라 계획 변경 검토 예정</b>"')},
-{sc:'svgEval2',sit:'급여제공계획서에 <strong>"공휴일에도 서비스 제공 가능"</strong>이라는 문구가 있습니다. 공휴일에 서비스를 제공했습니다.',q:'공휴일 제공을 기록지에 건별로 기재해야 할까요?',opts:['기재해야 한다. 공휴일은 별도로 기재하는 것이 원칙이다','기재하지 않아도 된다. 계획서에 문구가 있으면 건건 기재 불필요하다','보호자 서명을 받은 경우에만 기재 생략이 가능하다'],ans:1,ok:mkOk('<strong>공휴일 문구 있을 때 → 건건 기재 불필요</strong>합니다.','','급여제공계획서에 공휴일 제공 문구가 있으면 별도로 건건 기재하지 않아도 됩니다.',null)},
-{sc:'svgEval2',sit:'급여제공계획서에 <strong>공휴일 관련 문구가 없습니다.</strong> 이번 달 명절에 서비스를 제공했습니다.',q:'어떻게 처리해야 할까요?',opts:['공휴일 제공은 계획서 문구와 무관하게 자동 인정된다','명절이면 특별히 문구 없이도 기재 생략이 가능하다','계획서에 문구가 없으면 공휴일 제공 시 건건 기재해야 한다'],ans:2,ok:mkOk('<strong>공휴일 문구 없을 때 → 건건 기재 필수</strong>입니다.','','공휴일 제공 근거가 계획서에 없으면 제공할 때마다 기록지에 별도로 기재해야 합니다.',null)},
-{sc:'svgEval2',sit:'장기요양 <strong>수가가 변경</strong>됐습니다. 서비스 내용은 동일합니다.',q:'수가 변경 시 무엇을 해야 할까요?',opts:['새 수가로 변경계약을 다시 체결해야 한다','수급자에게 안내만 하면 된다. 변경계약은 불필요하다','수가 변경은 공단이 자동 적용하므로 센터 조치가 불필요하다'],ans:1,ok:mkOk('<strong>수가 변경 → 안내만</strong>, 변경계약 불필요합니다.','','수가 변경은 서비스 내용이나 횟수가 바뀌는 것이 아니므로 변경계약 없이 수급자에게 안내만 하면 됩니다.',null)}
+{sc:'svgRetro',sit:'이전 달 결과평가서를 <strong>소급해서 작성</strong>해야 하는 상황이 생겼습니다.',q:'어떻게 해야 할까요?',opts:['해당 날짜로 소급 작성해도 된다','자체 서식을 활용해서 관리한다','소급 작성은 원칙적으로 불가능하다'],ans:1,ok:mkOk('<strong>지나간 기록 → 자체 서식 활용</strong>으로 별도 관리합니다.','','지나간 기록을 직접 소급 작성하면 기록 조작으로 볼 수 있습니다.',null)},
+{sc:'svgTimePlan',sit:'어르신 상태 악화로 서비스 시간을 <strong>월 120분에서 180분으로 늘리기로</strong> 했습니다.',q:'어떤 절차가 필요할까요?',opts:['급여제공계획만 변경하면 된다','변경계약과 급여제공계획 변경 모두 필요하다','서비스 시간 변경은 담당자 판단으로 즉시 적용이 가능하다'],ans:1,ok:mkOk('<strong>서비스 시간 변경 → 변경계약 + 급여제공계획 변경</strong> 모두 필요합니다.','','서비스 횟수·시간 변경은 계약 조건 변경이므로 반드시 변경계약을 먼저 체결해야 합니다.',null)},
+{sc:'cal',sit:'이번달만 사정상 <strong>서비스 시간을 30분 추가</strong>로 제공했습니다. 지속 여부는 미정입니다.',q:'어떻게 처리해야 할까요?',opts:['변경계약을 체결해야 한다','급여제공계획을 먼저 변경해야 한다','급여제공기록지 특이사항란에 기재하면 된다'],ans:2,ok:mkOk('<strong>일시적 시간 증가 → 특이사항란에 기재</strong>, 변경계약·계획 변경 불필요합니다.','','이 상태가 지속된다면 그때 변경계약과 계획 변경을 검토합니다.',lbl('특이사항란') + '"이번달 건강 저하로 서비스 시간 30분 추가 제공<b style=\\"color:#C53030\\">(일시적)</b>, <b style=\\"color:#C53030\\">경과에 따라 계획 변경 검토 예정</b>"')},
+{sc:'svgHoliday',sit:'급여제공계획서에 <strong>"공휴일에도 서비스 제공 가능"</strong>이라는 문구가 있습니다. 공휴일에 서비스를 제공했습니다.',q:'공휴일 제공을 기록지에 건별로 기재해야 할까요?',opts:['기재해야 한다. 공휴일은 별도로 기재하는 것이 원칙이다','기재하지 않아도 된다. 계획서에 문구가 있으면 건건 기재 불필요하다','보호자 서명을 받은 경우에만 기재 생략이 가능하다'],ans:1,ok:mkOk('<strong>공휴일 문구 있을 때 → 건건 기재 불필요</strong>합니다.','','급여제공계획서에 공휴일 제공 문구가 있으면 별도로 건건 기재하지 않아도 됩니다.',null)},
+{sc:'svgHoliday',sit:'급여제공계획서에 <strong>공휴일 관련 문구가 없습니다.</strong> 이번 달 명절에 서비스를 제공했습니다.',q:'어떻게 처리해야 할까요?',opts:['공휴일 제공은 계획서 문구와 무관하게 자동 인정된다','명절이면 특별히 문구 없이도 기재 생략이 가능하다','계획서에 문구가 없으면 공휴일 제공 시 건건 기재해야 한다'],ans:2,ok:mkOk('<strong>공휴일 문구 없을 때 → 건건 기재 필수</strong>입니다.','','공휴일 제공 근거가 계획서에 없으면 제공할 때마다 기록지에 별도로 기재해야 합니다.',null)},
+{sc:'svgFeeNotice',sit:'장기요양 <strong>수가가 변경</strong>됐습니다. 서비스 내용은 동일합니다.',q:'수가 변경 시 무엇을 해야 할까요?',opts:['새 수가로 변경계약을 다시 체결해야 한다','수급자에게 안내만 하면 된다. 변경계약은 불필요하다','수가 변경은 공단이 자동 적용하므로 센터 조치가 불필요하다'],ans:1,ok:mkOk('<strong>수가 변경 → 안내만</strong>, 변경계약 불필요합니다.','','수가 변경은 서비스 내용이나 횟수가 바뀌는 것이 아니므로 변경계약 없이 수급자에게 안내만 하면 됩니다.',null)}
 ];
 
 const D6=[
-{sc:'svgCase2',sit:'사례관리 선정사유에 <strong>"환경개선이 필요한 상황이다"</strong>라고 기재했습니다.',q:'이 선정사유 작성이 맞을까요?',opts:['맞다. 개선이 필요하다는 것이 선정 근거다','틀리다. 선정사유에 결론을 미리 내놓으면 안 된다','선정사유는 간결할수록 좋으므로 이 방식이 맞다'],ans:1,ok:mkOk('<strong>선정사유 → 결론 미리 내놓으면 안 됩니다.</strong>','','\"선정사유가 제일 중요하다. 선정사유에 결론을 내놓으면 안 된다. 건강이 염려된다고 해야지.\"',lbl('올바른 예') + '<b style=\\"color:#C53030\\">"건강이 염려된다"</b> (O) / "환경개선이 필요하다" (X)')},
-{sc:'svgCase2',sit:'어르신이 치매 증상이 있어 <strong>인지 기능 개선</strong>을 목표로 사례관리 대상으로 선정했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 인지 기능 문제가 심각하므로 개입이 필요하다','부적절하다. 인지 영역은 개선 입증이 어려워 선정을 피해야 한다','인지 영역도 단계별 훈련 계획이 있으면 선정이 가능하다'],ans:1,ok:mkOk('<strong>인지 영역 → 선정 피하기</strong>. 개선 입증이 어렵습니다.','','\"인지 쪽으로 가면 개선됐다는 증거를 보여줄 수가 없어요.\"',null)},
-{sc:'svgCase2',sit:'어르신이 자주 넘어집니다. 사례관리 해결방안으로 <strong>"안전 손잡이 복지용구 연계"만</strong> 제시했습니다.',q:'이 해결방안이 사례관리로 인정될까요?',opts:['인정된다. 복지용구 연계는 명확한 환경 개선 해결책이다','인정되지 않는다. 복지용구만으로는 부족하고 운동 계획까지 있어야 한다','복지용구 연계 후 경과를 관찰하면 충분하다'],ans:1,ok:mkOk('<strong>복지용구만 → 인정 안 됨</strong>. 복지용구 + <strong>구체적 운동 계획</strong>이 있어야 합니다.','','복지용구는 수단이고 훈련이 목적입니다. 운동 계획 없이 도구 연계만으로는 사례관리로 인정되지 않습니다.',null)},
-{sc:'svgCase2',sit:'어르신 건강 상태가 악화되어 사례관리 해결방안으로 <strong>"요양병원 입원 연계"</strong>를 제시했습니다.',q:'이 해결방안이 사례관리로 인정될까요?',opts:['인정된다. 어르신에게 가장 적합한 의료적 조치다','인정되지 않는다. 요양병원·입원 연계는 QnA에서 명시적으로 불가하다','의사 소견서가 있으면 요양병원 연계도 가능하다'],ans:1,ok:mkOk('<strong>요양병원·입원 연계 → 사례관리 불가</strong>. QnA에 명시되어 있습니다.','','\"요양병원 단계입소 연계 이거 안 되는 거예요. 이건 명쾌하게 QnA에 나와 있어.\"',null)},
-{sc:'svgCase2',sit:'담당 요양보호사가 2주간 해외여행을 갑니다. 이 상황을 <strong>사례관리 대상으로 선정</strong>했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 수급자 서비스 연속성이 위협받으므로 사례관리가 필요하다','부적절하다. 요양보호사 연차 문제는 행정·인력관리 문제다','치매 수급자라면 이 경우도 사례관리 대상이 될 수 있다'],ans:1,ok:mkOk('<strong>요양보호사 연차 → 행정·인력관리 문제</strong>, 사례관리 대상이 아닙니다.','','요양보호사 연차는 센터 인력 운영의 문제입니다. 대체 인력 투입 등 행정적으로 해결해야 합니다.',null)},
+{sc:'svgCaseReason',sit:'사례관리 선정사유에 <strong>"환경개선이 필요한 상황이다"</strong>라고 기재했습니다.',q:'이 선정사유 작성이 맞을까요?',opts:['맞다. 개선이 필요하다는 것이 선정 근거다','틀리다. 선정사유에 결론을 미리 내놓으면 안 된다','선정사유는 간결할수록 좋으므로 이 방식이 맞다'],ans:1,ok:mkOk('<strong>선정사유 → 결론 미리 내놓으면 안 됩니다.</strong>','','\"선정사유가 제일 중요하다. 선정사유에 결론을 내놓으면 안 된다. 건강이 염려된다고 해야지.\"',lbl('올바른 예') + '<b style=\\"color:#C53030\\">"건강이 염려된다"</b> (O) / "환경개선이 필요하다" (X)')},
+{sc:'svgCogExclude',sit:'어르신이 치매 증상이 있어 <strong>인지 기능 개선</strong>을 목표로 사례관리 대상으로 선정했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 인지 기능 문제가 심각하므로 개입이 필요하다','부적절하다. 인지 영역은 개선 입증이 어려워 선정을 피해야 한다','인지 영역도 단계별 훈련 계획이 있으면 선정이 가능하다'],ans:1,ok:mkOk('<strong>인지 영역 → 선정 피하기</strong>. 개선 입증이 어렵습니다.','','\"인지 쪽으로 가면 개선됐다는 증거를 보여줄 수가 없어요.\"',null)},
+{sc:'svgFallTrain',sit:'어르신이 자주 넘어집니다. 사례관리 해결방안으로 <strong>"안전 손잡이 복지용구 연계"만</strong> 제시했습니다.',q:'이 해결방안이 사례관리로 인정될까요?',opts:['인정된다. 복지용구 연계는 명확한 환경 개선 해결책이다','인정되지 않는다. 복지용구만으로는 부족하고 운동 계획까지 있어야 한다','복지용구 연계 후 경과를 관찰하면 충분하다'],ans:1,ok:mkOk('<strong>복지용구만 → 인정 안 됨</strong>. 복지용구 + <strong>구체적 운동 계획</strong>이 있어야 합니다.','','복지용구는 수단이고 훈련이 목적입니다. 운동 계획 없이 도구 연계만으로는 사례관리로 인정되지 않습니다.',null)},
+{sc:'svgMedical',sit:'어르신 건강 상태가 악화되어 사례관리 해결방안으로 <strong>"요양병원 입원 연계"</strong>를 제시했습니다.',q:'이 해결방안이 사례관리로 인정될까요?',opts:['인정된다. 어르신에게 가장 적합한 의료적 조치다','인정되지 않는다. 요양병원·입원 연계는 QnA에서 명시적으로 불가하다','의사 소견서가 있으면 요양병원 연계도 가능하다'],ans:1,ok:mkOk('<strong>요양병원·입원 연계 → 사례관리 불가</strong>. QnA에 명시되어 있습니다.','','\"요양병원 단계입소 연계 이거 안 되는 거예요. 이건 명쾌하게 QnA에 나와 있어.\"',null)},
+{sc:'svgLeave',sit:'담당 요양보호사가 2주간 해외여행을 갑니다. 이 상황을 <strong>사례관리 대상으로 선정</strong>했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 수급자 서비스 연속성이 위협받으므로 사례관리가 필요하다','부적절하다. 요양보호사 연차 문제는 행정·인력관리 문제다','치매 수급자라면 이 경우도 사례관리 대상이 될 수 있다'],ans:1,ok:mkOk('<strong>요양보호사 연차 → 행정·인력관리 문제</strong>, 사례관리 대상이 아닙니다.','','요양보호사 연차는 센터 인력 운영의 문제입니다. 대체 인력 투입 등 행정적으로 해결해야 합니다.',null)},
 {sc:'svgCase2',sit:'수급자 등급이 상향될 것 같아 <strong>"등급 상향 추진"</strong>을 사례관리 목표로 선정했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 더 많은 서비스를 받을 수 있어 수급자에게 유리하다','부적절하다. 등급상향은 사례관리 대상이 아니다','수급자 가족이 요청한 경우라면 사례관리 목표가 될 수 있다'],ans:1,ok:mkOk('<strong>등급상향 → 사례관리 대상 아닙니다.</strong>','','등급 결정은 공단의 영역입니다. 사례관리는 수급자의 일상생활 기능 개선에 집중해야 합니다.',null)},
 {sc:'svgCase2',sit:'어르신의 케어 필요도가 높아서 <strong>"서비스 시간 증대"</strong>를 목표로 사례관리를 진행했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 어르신에게 더 많은 돌봄이 필요한 상황이다','부적절하다. 서비스 시간 증대는 센터 이익으로 보여 불신을 준다','수급자 가족이 동의한 경우라면 가능하다'],ans:1,ok:mkOk('<strong>서비스 시간 증대 → 센터 이익 의심</strong> 받을 수 있습니다.','','서비스 시간 증대는 센터 매출 증가로 이어지므로 평가에서 의심을 받습니다.',null)},
-{sc:'svgCase2',sit:'어르신에게 욕창이 발생했습니다. <strong>욕창 치료</strong>를 사례관리 목표로 선정했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 욕창 예방과 관리는 요양보호사가 할 수 있다','부적절하다. 욕창 치료 같은 의료적 문제는 요양보호사로 해결이 불가하다','방문간호와 연계하면 욕창 치료 사례관리가 가능하다'],ans:1,ok:mkOk('<strong>의료적 문제 → 요양보호사 해결 불가</strong>, 사례관리 선정 부적절합니다.','','욕창 치료는 의료행위입니다. 요양보호사의 역할 범위를 벗어나므로 사례관리 목표로 적절하지 않습니다.',null)},
-{sc:'svgCase2',sit:'사례관리 기록에서 <strong>논의 과정 2줄, 결론(해결방안) 8줄</strong>로 작성했습니다.',q:'이 비율이 맞을까요?',opts:['맞다. 결론이 명확하고 상세할수록 좋다','틀리다. 논의 내용이 결론보다 더 많아야 한다','논의와 결론의 비율은 자유롭게 작성해도 된다'],ans:1,ok:mkOk('<strong>논의 내용 > 결론 분량</strong>이어야 합니다.','','결론이 논의보다 많으면 충분한 검토 없이 결론을 내린 것처럼 보입니다.',null)},
-{sc:'svgCase2',sit:'사례관리 선정사유에 <strong>"건강이 염려되고 환경개선이 필요하다"</strong>고 작성했습니다.',q:'어떤 표현이 더 올바른 선정사유일까요?',opts:['"환경개선이 필요한 상황이다"','"건강이 염려된다"','둘 다 동일하게 사용해도 된다'],ans:1,ok:mkOk('<strong>"건강이 염려된다" → 올바른 선정사유</strong>. 결론을 미리 내지 않는 표현이어야 합니다.','','\"선정사유에 결론을 내놓으면 안 된다. 건강이 염려된다고 해야지.\"',null)}
+{sc:'svgMedical',sit:'어르신에게 욕창이 발생했습니다. <strong>욕창 치료</strong>를 사례관리 목표로 선정했습니다.',q:'이 선정이 적절할까요?',opts:['적절하다. 욕창 예방과 관리는 요양보호사가 할 수 있다','부적절하다. 욕창 치료 같은 의료적 문제는 요양보호사로 해결이 불가하다','방문간호와 연계하면 욕창 치료 사례관리가 가능하다'],ans:1,ok:mkOk('<strong>의료적 문제 → 요양보호사 해결 불가</strong>, 사례관리 선정 부적절합니다.','','욕창 치료는 의료행위입니다. 요양보호사의 역할 범위를 벗어나므로 사례관리 목표로 적절하지 않습니다.',null)},
+{sc:'svgCaseDebate',sit:'사례관리 기록에서 <strong>논의 과정 2줄, 결론(해결방안) 8줄</strong>로 작성했습니다.',q:'이 비율이 맞을까요?',opts:['맞다. 결론이 명확하고 상세할수록 좋다','틀리다. 논의 내용이 결론보다 더 많아야 한다','논의와 결론의 비율은 자유롭게 작성해도 된다'],ans:1,ok:mkOk('<strong>논의 내용 > 결론 분량</strong>이어야 합니다.','','결론이 논의보다 많으면 충분한 검토 없이 결론을 내린 것처럼 보입니다.',null)},
+{sc:'svgCaseReason',sit:'사례관리 선정사유에 <strong>"건강이 염려되고 환경개선이 필요하다"</strong>고 작성했습니다.',q:'어떤 표현이 더 올바른 선정사유일까요?',opts:['"환경개선이 필요한 상황이다"','"건강이 염려된다"','둘 다 동일하게 사용해도 된다'],ans:1,ok:mkOk('<strong>"건강이 염려된다" → 올바른 선정사유</strong>. 결론을 미리 내지 않는 표현이어야 합니다.','','\"선정사유에 결론을 내놓으면 안 된다. 건강이 염려된다고 해야지.\"',null)}
 ];
 
 const D7=[
-{sc:'svgTraining',sit:'사례관리 기록에서 <strong>해결방안을 자세히 기술</strong>하고 논의 과정은 간략하게 썼습니다.',q:'올바른 구조일까요?',opts:['맞다. 해결방안이 명확한 것이 중요하다','틀리다. 논의 내용이 결론보다 분량이 더 많아야 한다','논의와 결론의 비율은 사안에 따라 달리 적용해도 된다'],ans:1,ok:mkOk('<strong>논의 내용 > 결론 분량</strong>이 되어야 합니다.','','충분한 논의 과정이 기록되어야 해결방안의 신뢰도가 높아집니다.',null)},
-{sc:'svgTraining',sit:'사례관리 결론에 <strong>"지속적인 모니터링을 통해 경과 관찰"</strong>이라고 작성했습니다.',q:'이 결론이 인정될까요?',opts:['인정된다. 모니터링은 중요한 사례관리 방법이다','인정되지 않는다. 모니터링은 간접 해결책으로 감점 대상이다','초기 단계라면 모니터링도 직접 해결책으로 인정된다'],ans:1,ok:mkOk('<strong>모니터링만 → 간접 해결책, 감점 대상</strong>입니다.','','모니터링과 경과 관찰은 해결책이 아닌 관리 방법입니다. 직접적인 개입 계획이 있어야 합니다.',null)},
+{sc:'svgCaseDebate',sit:'사례관리 기록에서 <strong>해결방안을 자세히 기술</strong>하고 논의 과정은 간략하게 썼습니다.',q:'올바른 구조일까요?',opts:['맞다. 해결방안이 명확한 것이 중요하다','틀리다. 논의 내용이 결론보다 분량이 더 많아야 한다','논의와 결론의 비율은 사안에 따라 달리 적용해도 된다'],ans:1,ok:mkOk('<strong>논의 내용 > 결론 분량</strong>이 되어야 합니다.','','충분한 논의 과정이 기록되어야 해결방안의 신뢰도가 높아집니다.',null)},
+{sc:'svgIndirect',sit:'사례관리 결론에 <strong>"지속적인 모니터링을 통해 경과 관찰"</strong>이라고 작성했습니다.',q:'이 결론이 인정될까요?',opts:['인정된다. 모니터링은 중요한 사례관리 방법이다','인정되지 않는다. 모니터링은 간접 해결책으로 감점 대상이다','초기 단계라면 모니터링도 직접 해결책으로 인정된다'],ans:1,ok:mkOk('<strong>모니터링만 → 간접 해결책, 감점 대상</strong>입니다.','','모니터링과 경과 관찰은 해결책이 아닌 관리 방법입니다. 직접적인 개입 계획이 있어야 합니다.',null)},
 {sc:'svgTraining',sit:'낙상 예방 훈련을 진행하기로 하고 <strong>"주 2회 운동 실시"</strong>라고만 기록했습니다.',q:'이 기록이 충분할까요?',opts:['충분하다. 빈도가 명시되어 있으면 된다','부족하다. 단계별 구체적인 훈련 계획을 수립해야 한다','운동 종류까지 기재하면 충분하다'],ans:1,ok:mkOk('<strong>훈련 기록 → 단계별 구체적 계획 수립 필수</strong>','','주 2회라는 빈도만으로는 부족합니다. 어떤 동작을, 몇 단계로, 어떻게 진행하는지 구체적으로 기록해야 합니다.',lbl('올바른 예') + '1단계: <b style=\\"color:#C53030\\">손잡이 잡고 서기</b> (1주) → 2단계: <b style=\\"color:#C53030\\">보조 하에 5걸음</b> (2주) → 3단계: <b style=\\"color:#C53030\\">자립 보행 시도</b> (4주)')},
-{sc:'svgTraining',sit:'낙상 예방 사례관리에서 <strong>"안전 손잡이 설치"만</strong> 해결방안으로 제시했습니다.',q:'이 해결방안이 완성된 사례관리일까요?',opts:['완성됐다. 환경 개선이 이루어졌다','불완전하다. 복지용구 연계와 함께 구체적인 훈련 계획도 있어야 한다','환경 개선 후 추가 훈련 여부는 수급자 선택에 맡기면 된다'],ans:1,ok:mkOk('<strong>복지용구 + 훈련 연결 필수</strong>. 도구만으로는 완성된 사례관리가 아닙니다.','','안전 손잡이(복지용구)를 설치하고 → 이를 활용한 기둥 잡고 앉았다 일어서기, 까치발 들기 훈련 → 다리근력 강화로 낙상 예방 이렇게 연결되어야 합니다.',null)},
+{sc:'svgFallTrain',sit:'낙상 예방 사례관리에서 <strong>"안전 손잡이 설치"만</strong> 해결방안으로 제시했습니다.',q:'이 해결방안이 완성된 사례관리일까요?',opts:['완성됐다. 환경 개선이 이루어졌다','불완전하다. 복지용구 연계와 함께 구체적인 훈련 계획도 있어야 한다','환경 개선 후 추가 훈련 여부는 수급자 선택에 맡기면 된다'],ans:1,ok:mkOk('<strong>복지용구 + 훈련 연결 필수</strong>. 도구만으로는 완성된 사례관리가 아닙니다.','','안전 손잡이(복지용구)를 설치하고 → 이를 활용한 기둥 잡고 앉았다 일어서기, 까치발 들기 훈련 → 다리근력 강화로 낙상 예방 이렇게 연결되어야 합니다.',null)},
 {sc:'svgTraining',sit:'기능회복훈련을 진행했지만 <strong>업무수행일지에만 "운동 실시"</strong>라고 간단히 기재했습니다.',q:'이 기록이 충분할까요?',opts:['충분하다. 업무수행일지에 기재했으면 된다','부족하다. 상태변화기록지에 훈련 내용을 구체적으로 기재해야 한다','사진 증빙이 있으면 간단한 기록으로도 충분하다'],ans:1,ok:mkOk('<strong>훈련 내용 → 상태변화기록지에 구체적 기재 필수</strong>','','훈련 결과와 어르신 반응을 상태변화기록지에 구체적으로 기록해야 사례관리 근거가 됩니다.',null)},
-{sc:'svgTraining',sit:'환경개선을 목표로 사례관리 대상자를 선정했습니다. 선정사유에 <strong>"환경개선이 필요하다"</strong>고 작성했습니다.',q:'이 선정사유가 적절할까요?',opts:['적절하다. 목표와 선정사유가 일치한다','부적절하다. 선정사유에 결론(환경개선 필요)을 미리 내놓으면 안 된다','환경개선 사례관리의 경우는 직접적 표현이 허용된다'],ans:1,ok:mkOk('<strong>선정사유 → 결론 금지</strong>. 환경개선 여부와 관계없이 동일합니다.','','\"선정사유에 결론을 내놓으면 안 된다.\"',null)},
+{sc:'svgCaseReason',sit:'환경개선을 목표로 사례관리 대상자를 선정했습니다. 선정사유에 <strong>"환경개선이 필요하다"</strong>고 작성했습니다.',q:'이 선정사유가 적절할까요?',opts:['적절하다. 목표와 선정사유가 일치한다','부적절하다. 선정사유에 결론(환경개선 필요)을 미리 내놓으면 안 된다','환경개선 사례관리의 경우는 직접적 표현이 허용된다'],ans:1,ok:mkOk('<strong>선정사유 → 결론 금지</strong>. 환경개선 여부와 관계없이 동일합니다.','','\"선정사유에 결론을 내놓으면 안 된다.\"',null)},
 {sc:'svgTraining',sit:'사례회의를 통해 어르신 상태가 변화했음을 확인했습니다.',q:'사례회의 결과를 어떻게 반영해야 할까요?',opts:['결과 보고서만 작성하면 된다','급여제공계획 변경 또는 자체 기능회복훈련계획을 수립해야 한다','사례회의 결과는 보관만 하면 되고 별도 반영은 불필요하다'],ans:1,ok:mkOk('<strong>사례회의 결과 → 급여제공계획 변경 또는 기능회복훈련계획 수립</strong>','','사례회의 결과는 반드시 실제 서비스 계획에 반영되어야 합니다.',null)},
-{sc:'svgTraining',sit:'사례관리 결론에 <strong>"신규 요양보호사에게 인수인계"</strong>를 해결방안으로 기재했습니다.',q:'이 결론이 사례관리 해결책으로 인정될까요?',opts:['인정된다. 서비스 연속성을 위해 인수인계는 중요하다','인정되지 않는다. 인수인계는 간접 해결책으로 직접적 해결책이 필요하다','인수인계 후 경과 관찰을 추가하면 인정된다'],ans:1,ok:mkOk('<strong>인수인계 → 간접 해결책, 인정 안 됨</strong>. 직접적 해결책이 필요합니다.','','인수인계는 행정적 절차이지 어르신의 문제를 직접 해결하는 방법이 아닙니다.',null)},
-{sc:'svgTraining',sit:'낙상 예방 사례관리에서 복지용구(안전 손잡이)를 설치했습니다.',q:'다음으로 무엇이 있어야 완성된 사례관리가 될까요?',opts:['복지용구 설치로 사례관리가 완료됐다','설치 후 어르신이 잘 사용하는지 모니터링만 하면 된다','손잡이를 활용한 단계별 근력 강화 훈련 계획을 수립해야 한다'],ans:2,ok:mkOk('<strong>복지용구 설치 → 단계별 훈련 계획 수립</strong>으로 연결되어야 합니다.','','복지용구는 훈련의 도구입니다. 손잡이를 활용한 구체적인 단계별 근력 강화 훈련 계획이 있어야 완성된 사례관리입니다.',null)}
+{sc:'svgIndirect',sit:'사례관리 결론에 <strong>"신규 요양보호사에게 인수인계"</strong>를 해결방안으로 기재했습니다.',q:'이 결론이 사례관리 해결책으로 인정될까요?',opts:['인정된다. 서비스 연속성을 위해 인수인계는 중요하다','인정되지 않는다. 인수인계는 간접 해결책으로 직접적 해결책이 필요하다','인수인계 후 경과 관찰을 추가하면 인정된다'],ans:1,ok:mkOk('<strong>인수인계 → 간접 해결책, 인정 안 됨</strong>. 직접적 해결책이 필요합니다.','','인수인계는 행정적 절차이지 어르신의 문제를 직접 해결하는 방법이 아닙니다.',null)},
+{sc:'svgFallTrain',sit:'낙상 예방 사례관리에서 복지용구(안전 손잡이)를 설치했습니다.',q:'다음으로 무엇이 있어야 완성된 사례관리가 될까요?',opts:['복지용구 설치로 사례관리가 완료됐다','설치 후 어르신이 잘 사용하는지 모니터링만 하면 된다','손잡이를 활용한 단계별 근력 강화 훈련 계획을 수립해야 한다'],ans:2,ok:mkOk('<strong>복지용구 설치 → 단계별 훈련 계획 수립</strong>으로 연결되어야 합니다.','','복지용구는 훈련의 도구입니다. 손잡이를 활용한 구체적인 단계별 근력 강화 훈련 계획이 있어야 완성된 사례관리입니다.',null)}
 ];
 
 const D8=[
 {sc:'svgStaff',sit:'담당 요양보호사가 변경됐습니다. <strong>3주 후에 상담</strong>을 진행했습니다.',q:'이 상담 일정이 맞을까요?',opts:['맞다. 적응 기간을 고려해 3주 후가 더 효과적이다','늦었다. 요양보호사 변경 후 14일 이내에 상담해야 한다','상담 시기는 담당자가 자율적으로 결정할 수 있다'],ans:1,ok:mkOk('<strong>요양보호사 변경 → 14일 이내 상담 필수</strong>','','요양보호사 변경 후 14일을 초과하면 평가에서 감점됩니다.',null)},
 {sc:'svgStaff',sit:'요양보호사 변경 상담을 준비하고 있습니다. 무엇이 가장 중요할까요?',q:'변경 상담에서 핵심적인 것은 무엇일까요?',opts:['이전 요양보호사와의 관계 및 특이사항 정리','신규 요양보호사의 경력과 자격 파악','상담 대상 요양보호사 리스트업'],ans:2,ok:mkOk('<strong>요양보호사 변경 상담 → 리스트업이 핵심</strong>입니다.','','\"리스트업이 핵심이에요.\" 누가 변경됐는지, 언제 상담했는지 목록을 만드는 것이 가장 중요합니다.',null)},
-{sc:'svgStaff',sit:'신입 요양보호사가 <strong>입사 10일째</strong>가 됐습니다. 아직 직원 교육을 진행하지 않았습니다.',q:'이 상황이 문제가 될까요?',opts:['문제없다. 적응 후 교육하는 것이 더 효과적이다','문제된다. 신입 직원 교육은 7일 이내에 실시해야 한다','교육 시기는 센터 상황에 따라 유연하게 적용할 수 있다'],ans:1,ok:mkOk('<strong>신입 직원 교육 → 7일 이내 실시 필수</strong>','','입사 후 7일 이내에 교육을 실시하지 않으면 평가에서 불인정됩니다.',null)},
-{sc:'svgStaff',sit:'직원 교육 결과보고서에 교육 일시, 참여자, 교육 내용은 기재했는데 <strong>교육 방법(강의, 토론 등)은 빠뜨렸습니다.</strong>',q:'이 결과보고서가 인정될까요?',opts:['인정된다. 핵심 내용이 다 들어있다','인정되지 않는다. 교육방법 누락 시 해당 교육은 불인정된다','교육방법은 사진으로 대체 가능하다'],ans:1,ok:mkOk('<strong>교육방법 누락 → 해당 교육 불인정</strong>됩니다.','','교육 결과보고서에는 교육방법(강의, OJT, 토론 등)이 반드시 기재되어야 합니다.',null)},
-{sc:'svgStaff',sit:'직원 교육 결과보고서 서명란에 <strong>참여자 서명은 받았지만 차수 표시</strong>를 하지 않았습니다.',q:'차수 표시가 꼭 필요할까요?',opts:['불필요하다. 참여자 서명이 있으면 충분하다','필요하다. 결과보고 서명부에 차수 표시가 반드시 있어야 한다','차수는 별도 교육일지에 관리하면 된다'],ans:1,ok:mkOk('<strong>결과보고 서명부 → 차수 표시 필수</strong>','','차수 표시가 없으면 몇 번째 교육인지 확인이 불가해 평가에서 문제가 됩니다.',null)},
-{sc:'svgStaff',sit:'고충처리지침 연동지표를 점검 중입니다. 반드시 포함해야 할 3가지 필수 내용은?',q:'고충처리지침에 반드시 들어가야 할 3가지는 무엇일까요?',opts:['담당자, 처리기한, 보고체계','절차, 처리기한, 익명신고방법','접수방법, 담당자, 이의신청 절차'],ans:1,ok:mkOk('<strong>고충처리 연동지표 3가지: 절차 + 처리기한 + 익명신고방법</strong>','','이 3가지 중 하나라도 빠지면 연동지표에서 0점 처리됩니다.',null)},
-{sc:'svgStaff',sit:'직원 상담에서 <strong>특별한 고충이 없었습니다.</strong> 상담 기록을 작성하지 않았습니다.',q:'고충이 없어도 상담 기록을 작성해야 할까요?',opts:['불필요하다. 고충이 없으면 기록 자체가 의미 없다','필요하다. 고충 없음도 기록할 수 있다','연 1회 정기 상담만 기록하면 된다'],ans:1,ok:mkOk('<strong>고충 없음도 기록 가능</strong>. 상담 자체를 기록하는 것이 중요합니다.','','고충 없는 경우라도 상담 일시, 방법, 대상자, 내용을 기록해두면 평가에서 근거가 됩니다.',null)},
-{sc:'svgStaff',sit:'요양보호사 건강검진 기준일을 <strong>"채용 계약일"</strong>로 설정했습니다.',q:'올바른 기준일은 무엇일까요?',opts:['채용 계약일이 맞다. 입사 기준으로 관리하는 것이 원칙이다','서비스 개시일이 기준이다','매년 1월 1일을 기준으로 일괄 관리한다'],ans:1,ok:mkOk('<strong>건강검진 기준일 → 서비스 개시일</strong>','','채용일이 아닌 실제 서비스를 시작한 날이 기준입니다.',null)},
-{sc:'svgStaff',sit:'직원 교육에 <strong>불참한 요양보호사</strong>가 있습니다. 보충 교육을 언제 해야 할까요?',q:'불참자 개별교육 시간은 언제가 적절할까요?',opts:['다음 정기 교육 때 함께 진행하면 된다','근무시간 전후에 개별 교육을 실시해야 한다','불참자는 자체 학습 확인서로 대체할 수 있다'],ans:1,ok:mkOk('<strong>불참자 → 근무시간 전후 개별 교육 실시</strong>','','정기 교육 불참자는 근무시간 전이나 후에 별도로 개별 교육을 실시해야 합니다.',null)},
-{sc:'svgStaff',sit:'<strong>상호존중 안내</strong>를 작년에 한 번 실시했습니다.',q:'상호존중 안내는 얼마나 자주 해야 할까요?',opts:['입사 시 1회만 하면 된다','연 1회 이상 실시해야 한다','민원 발생 시마다 실시하면 된다'],ans:1,ok:mkOk('<strong>상호존중 안내 → 연 1회 이상</strong> 실시해야 합니다.','','상호존중 안내는 연 1회 이상 정기적으로 실시해야 하며, 2026년 1월에는 전 수급자 전수 안내가 있었습니다.',null)}
+{sc:'svgEdu7',sit:'신입 요양보호사가 <strong>입사 10일째</strong>가 됐습니다. 아직 직원 교육을 진행하지 않았습니다.',q:'이 상황이 문제가 될까요?',opts:['문제없다. 적응 후 교육하는 것이 더 효과적이다','문제된다. 신입 직원 교육은 7일 이내에 실시해야 한다','교육 시기는 센터 상황에 따라 유연하게 적용할 수 있다'],ans:1,ok:mkOk('<strong>신입 직원 교육 → 7일 이내 실시 필수</strong>','','입사 후 7일 이내에 교육을 실시하지 않으면 평가에서 불인정됩니다.',null)},
+{sc:'svgEdu7',sit:'직원 교육 결과보고서에 교육 일시, 참여자, 교육 내용은 기재했는데 <strong>교육 방법(강의, 토론 등)은 빠뜨렸습니다.</strong>',q:'이 결과보고서가 인정될까요?',opts:['인정된다. 핵심 내용이 다 들어있다','인정되지 않는다. 교육방법 누락 시 해당 교육은 불인정된다','교육방법은 사진으로 대체 가능하다'],ans:1,ok:mkOk('<strong>교육방법 누락 → 해당 교육 불인정</strong>됩니다.','','교육 결과보고서에는 교육방법(강의, OJT, 토론 등)이 반드시 기재되어야 합니다.',null)},
+{sc:'svgEdu7',sit:'직원 교육 결과보고서 서명란에 <strong>참여자 서명은 받았지만 차수 표시</strong>를 하지 않았습니다.',q:'차수 표시가 꼭 필요할까요?',opts:['불필요하다. 참여자 서명이 있으면 충분하다','필요하다. 결과보고 서명부에 차수 표시가 반드시 있어야 한다','차수는 별도 교육일지에 관리하면 된다'],ans:1,ok:mkOk('<strong>결과보고 서명부 → 차수 표시 필수</strong>','','차수 표시가 없으면 몇 번째 교육인지 확인이 불가해 평가에서 문제가 됩니다.',null)},
+{sc:'svgGrievance3',sit:'고충처리지침 연동지표를 점검 중입니다. 반드시 포함해야 할 3가지 필수 내용은?',q:'고충처리지침에 반드시 들어가야 할 3가지는 무엇일까요?',opts:['담당자, 처리기한, 보고체계','절차, 처리기한, 익명신고방법','접수방법, 담당자, 이의신청 절차'],ans:1,ok:mkOk('<strong>고충처리 연동지표 3가지: 절차 + 처리기한 + 익명신고방법</strong>','','이 3가지 중 하나라도 빠지면 연동지표에서 0점 처리됩니다.',null)},
+{sc:'svgGrievance3',sit:'직원 상담에서 <strong>특별한 고충이 없었습니다.</strong> 상담 기록을 작성하지 않았습니다.',q:'고충이 없어도 상담 기록을 작성해야 할까요?',opts:['불필요하다. 고충이 없으면 기록 자체가 의미 없다','필요하다. 고충 없음도 기록할 수 있다','연 1회 정기 상담만 기록하면 된다'],ans:1,ok:mkOk('<strong>고충 없음도 기록 가능</strong>. 상담 자체를 기록하는 것이 중요합니다.','','고충 없는 경우라도 상담 일시, 방법, 대상자, 내용을 기록해두면 평가에서 근거가 됩니다.',null)},
+{sc:'svgCheckup',sit:'요양보호사 건강검진 기준일을 <strong>"채용 계약일"</strong>로 설정했습니다.',q:'올바른 기준일은 무엇일까요?',opts:['채용 계약일이 맞다. 입사 기준으로 관리하는 것이 원칙이다','서비스 개시일이 기준이다','매년 1월 1일을 기준으로 일괄 관리한다'],ans:1,ok:mkOk('<strong>건강검진 기준일 → 서비스 개시일</strong>','','채용일이 아닌 실제 서비스를 시작한 날이 기준입니다.',null)},
+{sc:'svgEdu7',sit:'직원 교육에 <strong>불참한 요양보호사</strong>가 있습니다. 보충 교육을 언제 해야 할까요?',q:'불참자 개별교육 시간은 언제가 적절할까요?',opts:['다음 정기 교육 때 함께 진행하면 된다','근무시간 전후에 개별 교육을 실시해야 한다','불참자는 자체 학습 확인서로 대체할 수 있다'],ans:1,ok:mkOk('<strong>불참자 → 근무시간 전후 개별 교육 실시</strong>','','정기 교육 불참자는 근무시간 전이나 후에 별도로 개별 교육을 실시해야 합니다.',null)},
+{sc:'svgMutualRespect',sit:'<strong>상호존중 안내</strong>를 작년에 한 번 실시했습니다.',q:'상호존중 안내는 얼마나 자주 해야 할까요?',opts:['입사 시 1회만 하면 된다','연 1회 이상 실시해야 한다','민원 발생 시마다 실시하면 된다'],ans:1,ok:mkOk('<strong>상호존중 안내 → 연 1회 이상</strong> 실시해야 합니다.','','상호존중 안내는 연 1회 이상 정기적으로 실시해야 하며, 2026년 1월에는 전 수급자 전수 안내가 있었습니다.',null)}
 ];
 
 const D9=[
 {sc:'svgBoard',sit:'현재 게시판에 노인학대 예방, 폭언·폭행 예방, 성희롱 예방 포스터가 있습니다.',q:'빠진 필수 포스터가 있을까요?',opts:['없다. 주요 포스터는 다 있다','있다. 상호존중 안내 2종과 장애인 학대 예방 포스터가 빠졌다','있다. 화재 대피 요령 포스터가 빠졌다'],ans:1,ok:mkOk('<strong>필수 포스터 → 노인학대 + 상호존중 2종 + 폭언·폭행·성희롱 2종 + 장애인학대</strong>','','6종류의 포스터가 모두 게시되어 있어야 합니다.',null)},
 {sc:'svgBoard',sit:'방문목욕 성폭력 예방 지침 관련 평가 항목이 있습니다.',q:'이 항목에서 알아야 할 중요한 점은 무엇일까요?',opts:['방문목욕 성폭력 예방 지침은 센터 자율 선택 항목이다','방문목욕 성폭력 예방은 6점짜리 고배점 항목이다','방문목욕 성폭력 예방은 3점짜리 항목이다'],ans:1,ok:mkOk('<strong>방문목욕 성폭력 예방 → 6점 고배점</strong> 항목입니다.','','\"방문목욕에서 이거 커요. 6번 성폭력 예방에 대해서 질문이 6점짜리에요.\"',null)},
-{sc:'svgBoard',sit:'개인정보 동의서에 <strong>수집 항목과 수집 목적만 기재</strong>했습니다.',q:'빠진 필수 고지 항목이 있을까요?',opts:['없다. 수집 항목과 목적이 핵심이다','있다. 보유 기간과 거부 권리도 함께 고지해야 한다','있다. 개인정보 관리자 연락처도 포함해야 한다'],ans:1,ok:mkOk('<strong>개인정보 동의서 4가지 필수고지: 수집항목 + 수집목적 + 보유기간 + 거부권리</strong>','','이 4가지 중 하나라도 빠지면 개인정보 동의서로 인정되지 않습니다.',null)},
-{sc:'svgBoard',sit:'건강 정보를 수집하면서 <strong>일반 개인정보 동의서 하나만</strong> 받았습니다.',q:'이것으로 충분할까요?',opts:['충분하다. 동의서를 받았으면 된다','부족하다. 건강 정보 등 민감정보는 별도 동의를 받아야 한다','장기요양 서비스 특성상 건강정보에 별도 동의 불필요하다'],ans:1,ok:mkOk('<strong>민감정보(건강정보 등) → 별도 동의 필수</strong>','','건강 정보, 병력 등 민감정보는 일반 개인정보 동의와 별도로 추가 동의를 받아야 합니다.',null)},
-{sc:'svgBoard',sit:'개인정보를 공단, 지자체, 의료기관에 제공하면서 동의서에 <strong>"관련 기관에 제공할 수 있음"</strong>으로만 기재했습니다.',q:'이것으로 충분할까요?',opts:['충분하다. "관련 기관"으로 포괄적으로 표현됐다','부족하다. 제3자 제공 동의는 기관별로 명시해야 한다','수급자가 구두 동의하면 기관명 명시 생략이 가능하다'],ans:1,ok:mkOk('<strong>제3자 제공 동의 → 기관별 명시 필수</strong>','','\"제3자 제공 동의 기관별 명시\"가 필요합니다. 포괄적 표현은 인정되지 않습니다.',null)},
-{sc:'svgBoard',sit:'<strong>본인부담금이 변경</strong>됐습니다.',q:'변경계약을 다시 체결해야 할까요?',opts:['불필요하다. 수가 변경처럼 안내만 하면 된다','필요하다. 본인부담금 변경 시 반드시 변경계약을 체결해야 한다','수급자가 동의 의사를 표시하면 구두 동의로 대체 가능하다'],ans:1,ok:mkOk('<strong>본인부담금 변경 → 변경계약 체결 필수</strong>','','본인부담금 변경은 계약 금액 변경이므로 반드시 변경계약을 체결해야 합니다. 수가 변경과 다릅니다.',null)},
-{sc:'svgBoard',sit:'장기요양 <strong>수가가 변경</strong>됐습니다. 서비스 내용은 동일합니다.',q:'변경계약을 체결해야 할까요?',opts:['체결해야 한다. 계약 금액이 달라지므로 변경계약이 필요하다','불필요하다. 수가 변경 시에는 수급자에게 안내만 하면 된다','수급자 요청 시에만 변경계약을 체결한다'],ans:1,ok:mkOk('<strong>수가 변경 → 안내만</strong>, 변경계약 불필요합니다.','','수가는 공단에서 정하는 것으로 계약 내용 변경이 아닙니다. 수급자에게 안내만 하면 됩니다.',null)},
-{sc:'svgBoard',sit:'운영규정에 직원 상여금 지급 조항을 <strong>"지급하여야 한다"</strong>로 작성했습니다.',q:'이 문구가 적절할까요?',opts:['적절하다. 의무 지급임을 명확히 했다','부적절하다. "지급할 수 있다"로 작성해야 재량의 여지가 생긴다','두 표현 모두 무방하다'],ans:1,ok:mkOk('<strong>운영규정 급여 문구 → "지급할 수 있다"</strong>가 적절합니다.','','"지급하여야 한다"로 작성하면 반드시 지급해야 할 의무가 생겨 운영상 문제가 생길 수 있습니다.',null)},
-{sc:'svgBoard',sit:'급여제공기록지 교부 시 <strong>교부일자만 기재하고 수령자 서명은 받지 않았습니다.</strong>',q:'이것으로 충분할까요?',opts:['충분하다. 교부일자가 있으면 된다','부족하다. 교부일자와 수령자 서명이 모두 있어야 한다','전자 발송이면 서명 없이도 된다'],ans:1,ok:mkOk('<strong>기록지 교부 → 교부일자 + 수령자 서명 모두 필수</strong>','','교부일자와 수령자 서명이 모두 있어야 교부 사실이 인정됩니다.',null)},
-{sc:'svgBoard',sit:'수급자 가족이 <strong>앱을 설치</strong>해서 기록지를 실시간으로 확인하고 있습니다. 별도 교부를 하지 않았습니다.',q:'이것이 허용될까요?',opts:['허용되지 않는다. 앱과 별개로 서면 교부가 의무다','허용된다. 앱 설치 시 교부 의무가 면제된다','앱 설치 후 첫 달은 교부해야 하고 이후 면제된다'],ans:1,ok:mkOk('<strong>앱 설치 → 교부 의무 면제</strong>됩니다.','','수급자 또는 보호자가 앱을 설치한 경우에는 별도 서면 교부 의무가 면제됩니다.',null)}
+{sc:'svgPrivacy4',sit:'개인정보 동의서에 <strong>수집 항목과 수집 목적만 기재</strong>했습니다.',q:'빠진 필수 고지 항목이 있을까요?',opts:['없다. 수집 항목과 목적이 핵심이다','있다. 보유 기간과 거부 권리도 함께 고지해야 한다','있다. 개인정보 관리자 연락처도 포함해야 한다'],ans:1,ok:mkOk('<strong>개인정보 동의서 4가지 필수고지: 수집항목 + 수집목적 + 보유기간 + 거부권리</strong>','','이 4가지 중 하나라도 빠지면 개인정보 동의서로 인정되지 않습니다.',null)},
+{sc:'svgPrivacy4',sit:'건강 정보를 수집하면서 <strong>일반 개인정보 동의서 하나만</strong> 받았습니다.',q:'이것으로 충분할까요?',opts:['충분하다. 동의서를 받았으면 된다','부족하다. 건강 정보 등 민감정보는 별도 동의를 받아야 한다','장기요양 서비스 특성상 건강정보에 별도 동의 불필요하다'],ans:1,ok:mkOk('<strong>민감정보(건강정보 등) → 별도 동의 필수</strong>','','건강 정보, 병력 등 민감정보는 일반 개인정보 동의와 별도로 추가 동의를 받아야 합니다.',null)},
+{sc:'svgPrivacy4',sit:'개인정보를 공단, 지자체, 의료기관에 제공하면서 동의서에 <strong>"관련 기관에 제공할 수 있음"</strong>으로만 기재했습니다.',q:'이것으로 충분할까요?',opts:['충분하다. "관련 기관"으로 포괄적으로 표현됐다','부족하다. 제3자 제공 동의는 기관별로 명시해야 한다','수급자가 구두 동의하면 기관명 명시 생략이 가능하다'],ans:1,ok:mkOk('<strong>제3자 제공 동의 → 기관별 명시 필수</strong>','','\"제3자 제공 동의 기관별 명시\"가 필요합니다. 포괄적 표현은 인정되지 않습니다.',null)},
+{sc:'svgContractChange',sit:'<strong>본인부담금이 변경</strong>됐습니다.',q:'변경계약을 다시 체결해야 할까요?',opts:['불필요하다. 수가 변경처럼 안내만 하면 된다','필요하다. 본인부담금 변경 시 반드시 변경계약을 체결해야 한다','수급자가 동의 의사를 표시하면 구두 동의로 대체 가능하다'],ans:1,ok:mkOk('<strong>본인부담금 변경 → 변경계약 체결 필수</strong>','','본인부담금 변경은 계약 금액 변경이므로 반드시 변경계약을 체결해야 합니다. 수가 변경과 다릅니다.',null)},
+{sc:'svgFeeNotice',sit:'장기요양 <strong>수가가 변경</strong>됐습니다. 서비스 내용은 동일합니다.',q:'변경계약을 체결해야 할까요?',opts:['체결해야 한다. 계약 금액이 달라지므로 변경계약이 필요하다','불필요하다. 수가 변경 시에는 수급자에게 안내만 하면 된다','수급자 요청 시에만 변경계약을 체결한다'],ans:1,ok:mkOk('<strong>수가 변경 → 안내만</strong>, 변경계약 불필요합니다.','','수가는 공단에서 정하는 것으로 계약 내용 변경이 아닙니다. 수급자에게 안내만 하면 됩니다.',null)},
+{sc:'svgRuleText',sit:'운영규정에 직원 상여금 지급 조항을 <strong>"지급하여야 한다"</strong>로 작성했습니다.',q:'이 문구가 적절할까요?',opts:['적절하다. 의무 지급임을 명확히 했다','부적절하다. "지급할 수 있다"로 작성해야 재량의 여지가 생긴다','두 표현 모두 무방하다'],ans:1,ok:mkOk('<strong>운영규정 급여 문구 → "지급할 수 있다"</strong>가 적절합니다.','','"지급하여야 한다"로 작성하면 반드시 지급해야 할 의무가 생겨 운영상 문제가 생길 수 있습니다.',null)},
+{sc:'svgRecordDelivery',sit:'급여제공기록지 교부 시 <strong>교부일자만 기재하고 수령자 서명은 받지 않았습니다.</strong>',q:'이것으로 충분할까요?',opts:['충분하다. 교부일자가 있으면 된다','부족하다. 교부일자와 수령자 서명이 모두 있어야 한다','전자 발송이면 서명 없이도 된다'],ans:1,ok:mkOk('<strong>기록지 교부 → 교부일자 + 수령자 서명 모두 필수</strong>','','교부일자와 수령자 서명이 모두 있어야 교부 사실이 인정됩니다.',null)},
+{sc:'svgRecordDelivery',sit:'수급자 가족이 <strong>앱을 설치</strong>해서 기록지를 실시간으로 확인하고 있습니다. 별도 교부를 하지 않았습니다.',q:'이것이 허용될까요?',opts:['허용되지 않는다. 앱과 별개로 서면 교부가 의무다','허용된다. 앱 설치 시 교부 의무가 면제된다','앱 설치 후 첫 달은 교부해야 하고 이후 면제된다'],ans:1,ok:mkOk('<strong>앱 설치 → 교부 의무 면제</strong>됩니다.','','수급자 또는 보호자가 앱을 설치한 경우에는 별도 서면 교부 의무가 면제됩니다.',null)}
 ];
 
 const D10=[
-{sc:'svgBath2',sit:'평가 배점을 확인하고 있습니다. 방문목욕 성폭력 예방 항목의 배점이 궁금합니다.',q:'방문목욕 성폭력 예방 항목의 배점은 얼마일까요?',opts:['3점','6점','평가 항목이 아니다'],ans:1,ok:mkOk('<strong>방문목욕 성폭력 예방 → 6점 고배점</strong>','','\"방문목욕에서 이거 커요. 6번 성폭력 예방에 대해서 질문이 6점짜리에요.\"',null)},
-{sc:'svgBath2',sit:'요양보호사 건강검진 기준일 관리를 검토하고 있습니다.',q:'건강검진 관리의 올바른 기준일은 무엇인가요?',opts:['채용 계약일','서비스 개시일','매년 1월 1일'],ans:1,ok:mkOk('<strong>건강검진 기준일 → 서비스 개시일</strong>','','채용일이 아닌 실제 서비스를 시작한 날이 기준입니다. 발행일자·항목 충족 여부도 함께 확인해야 합니다.',null)},
+{sc:'svgSafety6',sit:'평가 배점을 확인하고 있습니다. 방문목욕 성폭력 예방 항목의 배점이 궁금합니다.',q:'방문목욕 성폭력 예방 항목의 배점은 얼마일까요?',opts:['3점','6점','평가 항목이 아니다'],ans:1,ok:mkOk('<strong>방문목욕 성폭력 예방 → 6점 고배점</strong>','','\"방문목욕에서 이거 커요. 6번 성폭력 예방에 대해서 질문이 6점짜리에요.\"',null)},
+{sc:'svgCheckup',sit:'요양보호사 건강검진 기준일 관리를 검토하고 있습니다.',q:'건강검진 관리의 올바른 기준일은 무엇인가요?',opts:['채용 계약일','서비스 개시일','매년 1월 1일'],ans:1,ok:mkOk('<strong>건강검진 기준일 → 서비스 개시일</strong>','','채용일이 아닌 실제 서비스를 시작한 날이 기준입니다. 발행일자·항목 충족 여부도 함께 확인해야 합니다.',null)},
 {sc:'svgBath2',sit:'어르신 보행 상태가 <strong>"보행기 사용"과 "부축 필요" 중간</strong> 어느 쪽인지 애매합니다.',q:'척도 기재를 어떻게 해야 할까요?',opts:['더 좋은 쪽(보행기 사용)으로 기재한다','가장 근접한 척도를 선택한다','두 항목을 모두 체크한다'],ans:1,ok:mkOk('<strong>척도 경계 애매 → 가장 근접한 것 선택</strong>','','\"척도 경계 애매할 때 가장 근접한 것 선택, 세부기준 만들면 더 복잡해짐.\"',null)},
-{sc:'svgBath2',sit:'상호존중 안내와 관련하여 <strong>2026년 1월</strong>에 특별히 실시해야 할 것이 있었습니다.',q:'무엇이었을까요?',opts:['상호존중 안내를 처음 도입한 해라 연 2회 실시','전 수급자에게 전수 안내 실시','신규 수급자에게만 집중 안내'],ans:1,ok:mkOk('<strong>2026년 1월 → 전 수급자 전수 안내 실시</strong>','','2026년 1월에는 기존 수급자를 포함한 전 수급자에게 상호존중 안내를 전수 실시해야 합니다.',null)},
-{sc:'svgBath2',sit:'급여제공기록지를 <strong>우편으로 발송</strong>하면서 교부일자와 수령자 서명을 받았습니다.',q:'추가로 필요한 것이 있을까요?',opts:['없다. 교부일자와 서명으로 충분하다','우편 발송 시 우편물관리대장을 작성해야 한다','우편 영수증을 보관하면 된다'],ans:1,ok:mkOk('<strong>우편 발송 → 우편물관리대장 작성 필수</strong>','','우편으로 발송한 경우에는 우편물관리대장을 별도로 작성해서 관리해야 합니다.',null)},
-{sc:'svgBath2',sit:'<strong>가족요양</strong>을 받고 있는 수급자에게 급여제공기록지를 교부하지 않았습니다.',q:'이것이 문제가 될까요?',opts:['문제된다. 모든 수급자에게 교부 의무가 있다','문제되지 않는다. 가족요양 수급자는 교부 의무가 없다','가족에게 교부하면 수급자 교부로 인정된다'],ans:1,ok:mkOk('<strong>가족요양 수급자 → 교부 의무 없음</strong>','','가족요양을 받는 수급자에 대해서는 급여제공기록지 교부 의무가 적용되지 않습니다.',null)},
-{sc:'svgBath2',sit:'요양보호사가 제출한 <strong>건강검진 결과서</strong>를 확인하고 있습니다.',q:'무엇을 확인해야 할까요?',opts:['검진 기관의 인증 여부만 확인하면 된다','발행일자와 항목 충족 여부를 확인해야 한다','요양보호사 자필 서명이 있는지 확인한다'],ans:1,ok:mkOk('<strong>건강검진 → 발행일자 + 항목 충족 여부 확인 필수</strong>','','검진 기관 인증보다 발행일자가 서비스 개시일 기준에 맞는지, 필요 항목이 모두 포함됐는지 확인해야 합니다.',null)}
+{sc:'svgMutualRespect',sit:'상호존중 안내와 관련하여 <strong>2026년 1월</strong>에 특별히 실시해야 할 것이 있었습니다.',q:'무엇이었을까요?',opts:['상호존중 안내를 처음 도입한 해라 연 2회 실시','전 수급자에게 전수 안내 실시','신규 수급자에게만 집중 안내'],ans:1,ok:mkOk('<strong>2026년 1월 → 전 수급자 전수 안내 실시</strong>','','2026년 1월에는 기존 수급자를 포함한 전 수급자에게 상호존중 안내를 전수 실시해야 합니다.',null)},
+{sc:'svgMailbox',sit:'급여제공기록지를 <strong>우편으로 발송</strong>하면서 교부일자와 수령자 서명을 받았습니다.',q:'추가로 필요한 것이 있을까요?',opts:['없다. 교부일자와 서명으로 충분하다','우편 발송 시 우편물관리대장을 작성해야 한다','우편 영수증을 보관하면 된다'],ans:1,ok:mkOk('<strong>우편 발송 → 우편물관리대장 작성 필수</strong>','','우편으로 발송한 경우에는 우편물관리대장을 별도로 작성해서 관리해야 합니다.',null)},
+{sc:'svgFamilyCare',sit:'<strong>가족요양</strong>을 받고 있는 수급자에게 급여제공기록지를 교부하지 않았습니다.',q:'이것이 문제가 될까요?',opts:['문제된다. 모든 수급자에게 교부 의무가 있다','문제되지 않는다. 가족요양 수급자는 교부 의무가 없다','가족에게 교부하면 수급자 교부로 인정된다'],ans:1,ok:mkOk('<strong>가족요양 수급자 → 교부 의무 없음</strong>','','가족요양을 받는 수급자에 대해서는 급여제공기록지 교부 의무가 적용되지 않습니다.',null)},
+{sc:'svgCheckup',sit:'요양보호사가 제출한 <strong>건강검진 결과서</strong>를 확인하고 있습니다.',q:'무엇을 확인해야 할까요?',opts:['검진 기관의 인증 여부만 확인하면 된다','발행일자와 항목 충족 여부를 확인해야 한다','요양보호사 자필 서명이 있는지 확인한다'],ans:1,ok:mkOk('<strong>건강검진 → 발행일자 + 항목 충족 여부 확인 필수</strong>','','검진 기관 인증보다 발행일자가 서비스 개시일 기준에 맞는지, 필요 항목이 모두 포함됐는지 확인해야 합니다.',null)}
 ];
 
 const QDB={1:D1,2:D2,3:D3,4:D4,5:D5,6:D6,7:D7,8:D8,9:D9,10:D10};
@@ -615,6 +1485,15 @@ function nextQ(){
 function goHome(){reviewMode=false;screen='home';render();}
 
 loadP();render();
+
+// PWA Service Worker 등록
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered');
+    }).catch(function(e){console.log('SW error',e);});
+  });
+}
 </script>
 </body>
 </html>
