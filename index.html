@@ -1267,6 +1267,22 @@ var screen='home',curDay=1,curQ=0,sessAns=[],progData={},qAnswered=false;
 var wrongQs=[],reviewMode=false,reviewIdx=0,qStates=[],rqStates=[];
 
 function loadP(){try{var s=localStorage.getItem('rqz_p');if(s)progData=JSON.parse(s);}catch(e){}}
+// ── 선택지 셔플 ─────────────────────────────
+var shuffleCache={};
+function getShuffled(day,qIdx){
+  var key=day+'_'+qIdx;
+  if(shuffleCache[key])return shuffleCache[key];
+  var q=QDB[day][qIdx];
+  var order=[0,1,2];
+  // Fisher-Yates (day+qIdx 시드 → 세션 내 고정)
+  var seed=(day*100+qIdx)*7919;
+  function rand(){seed=(seed*1664525+1013904223)&0xffffffff;return(seed>>>0)/4294967296;}
+  for(var i=2;i>0;i--){var j=Math.floor(rand()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}
+  var newAns=order.indexOf(q.ans);
+  shuffleCache[key]={order:order,ans:newAns};
+  return shuffleCache[key];
+}
+
 function saveP(){try{localStorage.setItem('rqz_p',JSON.stringify(progData));}catch(e){}}
 function doneQ(){return DAYS.reduce(function(s,d){var p=progData[d.d];return s+(p?p.done:0);},0);}
 function totalQ(){return DAYS.reduce(function(s,d){return s+d.n;},0);}
@@ -1305,7 +1321,11 @@ function renderQ(){
   qAnswered=false;
   var pct=Math.round((qCur-1)/qTotal*100);
   var hasPrev=isRev?reviewIdx>0:curQ>0;
-  var ops=q.opts.map(function(o,i){return'<button class="op" onclick="answer('+i+','+q.ans+')"><span class="on">'+['①','②','③'][i]+'</span><span>'+o+'</span></button>';}).join('');
+  var qIdx=isRev?wrongQs[reviewIdx]:curQ;
+  var sh=getShuffled(curDay,qIdx);
+  var shuffledOpts=sh.order.map(function(oi){return q.opts[oi];});
+  var shuffledAns=sh.ans;
+  var ops=shuffledOpts.map(function(o,i){return'<button class="op" onclick="answer('+i+','+shuffledAns+')"><span class="on">'+['①','②','③'][i]+'</span><span>'+o+'</span></button>';}).join('');
   var revBadge=isRev?'<div style="margin-bottom:.5rem"><span class="revbadge">🔁 오답 복습 중</span></div>':'';
   var nbLabel=isRev?(reviewIdx<wrongQs.length-1?'다음 문제 →':'복습 완료 →'):(curQ<day.n-1?'다음 문제 →':'결과 보기 →');
   var nbCls=isRev?'nb rev':'nb';
@@ -1332,8 +1352,10 @@ function restoreState(){
   if(!st||!st.done)return;
   qAnswered=true;
   var q=reviewMode?QDB[curDay][wrongQs[reviewIdx]]:QDB[curDay][curQ];
+  var rQIdx=reviewMode?wrongQs[reviewIdx]:curQ;
+  var rSh=getShuffled(curDay,rQIdx);
   var btns=document.querySelectorAll('.op');
-  btns.forEach(function(b,i){b.classList.add('dis');if(i===q.ans)b.classList.add('oc');else if(i===st.chosen&&!st.ok)b.classList.add('ow');});
+  btns.forEach(function(b,i){b.classList.add('dis');if(i===rSh.ans)b.classList.add('oc');else if(i===st.chosen&&!st.ok)b.classList.add('ow');});
   var fb=document.getElementById('fbx');
   fb.innerHTML='<div style="font-size:15px;font-weight:700;color:#276749;margin-bottom:8px">✅ 정답입니다!</div>'+q.ok;
   fb.className='fbx sh ok';
